@@ -26,6 +26,7 @@ type Config struct {
 
 	ProducerCount uint64
 	WorkerCount   int
+	BatchSize     uint64
 
 	Repo   repo.EventRepo
 	Sender sender.EventSender
@@ -52,6 +53,7 @@ func NewRetranslator(cfg Config) Retranslator {
 
 	p := producer.NewKafkaProducer(
 		cfg.ProducerCount,
+		cfg.BatchSize,
 		cfg.Repo,
 		cfg.Sender,
 		events,

@@ -18,8 +18,9 @@ type Producer interface {
 }
 
 type producer struct {
-	n       uint64
-	timeout time.Duration
+	n         uint64
+	timeout   time.Duration
+	batchSize uint64
 
 	repo   repo.EventRepo
 	sender sender.EventSender
@@ -33,6 +34,7 @@ type producer struct {
 
 func NewKafkaProducer(
 	n uint64,
+	batchSize uint64,
 	repo repo.EventRepo,
 	sender sender.EventSender,
 	events <-chan model.LocationEvent,
@@ -43,6 +45,7 @@ func NewKafkaProducer(
 
 	return &producer{
 		n:          n,
+		batchSize:  batchSize,
 		repo:       repo,
 		sender:     sender,
 		events:     events,
@@ -68,23 +71,26 @@ func (p *producer) Close() {
 }
 
 func (p *producer) produce() {
+	updateBatch := make([]uint64, 0, p.batchSize)
+	cleanBatch := make([]uint64, 0, p.batchSize)
+
 	for {
 		select {
 		case event := <-p.events:
 			if event.Type == model.Created {
 				if err := p.sender.Send(&event); err != nil {
 					log.Printf("failed to send event: %v", err)
-					p.workerPool.Submit(func() {
-						if err := p.repo.Unlock([]uint64{event.ID}); err != nil {
-							log.Printf("failed to unlock events: %v", err)
-						}
-					})
+					updateBatch = append(updateBatch, event.ID)
+					if len(updateBatch) == cap(updateBatch) {
+						p.update(updateBatch)
+						updateBatch = updateBatch[:0]
+					}
 				} else {
-					p.workerPool.Submit(func() {
-						if err := p.repo.Remove([]uint64{event.ID}); err != nil {
-							log.Printf("failed to remove events: %v", err)
-						}
-					})
+					cleanBatch = append(cleanBatch, event.ID)
+					if len(cleanBatch) == cap(cleanBatch) {
+						p.clean(cleanBatch)
+						cleanBatch = cleanBatch[:0]
+					}
 				}
 			}
 
@@ -92,4 +98,20 @@ func (p *producer) produce() {
 			return
 		}
 	}
+}
+
+func (p *producer) update(eventIDs []uint64) {
+	p.workerPool.Submit(func() {
+		if err := p.repo.Unlock(eventIDs); err != nil {
+			log.Printf("failed to unlock events: %v", err)
+		}
+	})
+}
+
+func (p *producer) clean(eventIDs []uint64) {
+	p.workerPool.Submit(func() {
+		if err := p.repo.Remove(eventIDs); err != nil {
+			log.Printf("failed to remove events: %v", err)
+		}
+	})
 }
