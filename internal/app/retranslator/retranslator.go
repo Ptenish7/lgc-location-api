@@ -1,6 +1,7 @@
 package retranslator
 
 import (
+	"context"
 	"time"
 
 	"github.com/gammazero/workerpool"
@@ -37,6 +38,7 @@ type retranslator struct {
 	consumer   consumer.Consumer
 	producer   producer.Producer
 	workerPool *workerpool.WorkerPool
+	cancelFunc context.CancelFunc
 }
 
 func NewRetranslator(cfg Config) Retranslator {
@@ -69,11 +71,14 @@ func NewRetranslator(cfg Config) Retranslator {
 }
 
 func (r *retranslator) Start() {
-	r.producer.Start()
-	r.consumer.Start()
+	ctx, cancel := context.WithCancel(context.Background())
+	r.cancelFunc = cancel
+	r.producer.Start(ctx)
+	r.consumer.Start(ctx)
 }
 
 func (r *retranslator) Close() {
+	r.cancelFunc()
 	r.consumer.Close()
 	r.producer.Close()
 	r.workerPool.StopWait()

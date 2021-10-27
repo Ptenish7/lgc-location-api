@@ -1,6 +1,7 @@
 package producer
 
 import (
+	"context"
 	"log"
 	"sync"
 	"time"
@@ -13,7 +14,7 @@ import (
 )
 
 type Producer interface {
-	Start()
+	Start(ctx context.Context)
 	Close()
 }
 
@@ -28,8 +29,7 @@ type producer struct {
 
 	workerPool *workerpool.WorkerPool
 
-	wg   *sync.WaitGroup
-	done chan bool
+	wg *sync.WaitGroup
 }
 
 func NewKafkaProducer(
@@ -41,7 +41,6 @@ func NewKafkaProducer(
 	workerPool *workerpool.WorkerPool,
 ) Producer {
 	wg := &sync.WaitGroup{}
-	done := make(chan bool)
 
 	return &producer{
 		n:          n,
@@ -51,26 +50,24 @@ func NewKafkaProducer(
 		events:     events,
 		workerPool: workerPool,
 		wg:         wg,
-		done:       done,
 	}
 }
 
-func (p *producer) Start() {
+func (p *producer) Start(ctx context.Context) {
 	for i := uint64(0); i < p.n; i++ {
 		p.wg.Add(1)
 		go func() {
 			defer p.wg.Done()
-			p.produce()
+			p.produce(ctx)
 		}()
 	}
 }
 
 func (p *producer) Close() {
-	close(p.done)
 	p.wg.Wait()
 }
 
-func (p *producer) produce() {
+func (p *producer) produce(ctx context.Context) {
 	updateBatch := make([]uint64, 0, p.batchSize)
 	cleanBatch := make([]uint64, 0, p.batchSize)
 
@@ -94,7 +91,7 @@ func (p *producer) produce() {
 				}
 			}
 
-		case <-p.done:
+		case <-ctx.Done():
 			return
 		}
 	}
