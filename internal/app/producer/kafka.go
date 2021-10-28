@@ -92,6 +92,12 @@ func (p *producer) produce(ctx context.Context) {
 			}
 
 		case <-ctx.Done():
+			if len(updateBatch) != 0 {
+				p.update(updateBatch)
+			}
+			if len(cleanBatch) != 0 {
+				p.clean(cleanBatch)
+			}
 			return
 		}
 	}
