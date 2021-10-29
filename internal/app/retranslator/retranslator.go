@@ -34,7 +34,7 @@ type Config struct {
 }
 
 type retranslator struct {
-	events     chan model.LocationEvent
+	events     chan []model.LocationEvent
 	consumer   consumer.Consumer
 	producer   producer.Producer
 	workerPool *workerpool.WorkerPool
@@ -42,7 +42,7 @@ type retranslator struct {
 }
 
 func NewRetranslator(cfg Config) Retranslator {
-	events := make(chan model.LocationEvent, cfg.ChannelSize)
+	events := make(chan []model.LocationEvent, cfg.ChannelSize)
 	workerPool := workerpool.New(cfg.WorkerCount)
 
 	c := consumer.NewDbConsumer(
