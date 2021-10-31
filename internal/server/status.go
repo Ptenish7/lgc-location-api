@@ -6,8 +6,9 @@ import (
 	"net/http"
 	"sync/atomic"
 
-	"github.com/ozonmp/omp-template-api/internal/config"
 	"github.com/rs/zerolog/log"
+
+	"github.com/ozonmp/lgc-location-api/internal/config"
 )
 
 func createStatusServer(cfg *config.Config, isReady *atomic.Value) *http.Server {

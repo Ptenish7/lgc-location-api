@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ozonmp/omp-template-api/internal/config"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+
+	"github.com/ozonmp/lgc-location-api/internal/config"
 )
 
 func createMetricsServer(cfg *config.Config) *http.Server {

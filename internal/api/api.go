@@ -10,14 +10,14 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/ozonmp/omp-template-api/internal/repo"
+	"github.com/ozonmp/lgc-location-api/internal/repo"
 
-	pb "github.com/ozonmp/omp-template-api/pkg/omp-template-api"
+	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"
 )
 
 var (
 	totalTemplateNotFound = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "omp_template_api_template_not_found_total",
+		Name: "lgc_location_api_template_not_found_total",
 		Help: "Total number of templates that were not found",
 	})
 )
@@ -27,7 +27,7 @@ type templateAPI struct {
 	repo repo.Repo
 }
 
-// NewTemplateAPI returns api of omp-template-api service
+// NewTemplateAPI returns api of lgc-template-api service
 func NewTemplateAPI(r repo.Repo) pb.OmpTemplateApiServiceServer {
 	return &templateAPI{repo: r}
 }
