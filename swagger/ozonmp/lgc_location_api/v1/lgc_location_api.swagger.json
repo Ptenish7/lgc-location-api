@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "OmpTemplateApiService"
+      "name": "LgcLocationApiService"
     }
   ],
   "consumes": [
@@ -16,15 +16,15 @@
     "application/json"
   ],
   "paths": {
-    "/v1/templates/{templateId}": {
-      "get": {
-        "summary": "DescribeTemplateV1 - Describe a template",
-        "operationId": "OmpTemplateApiService_DescribeTemplateV1",
+    "/v1/locations/create": {
+      "post": {
+        "summary": "CreateLocationV1 - Create a location",
+        "operationId": "LgcLocationApiService_CreateLocationV1",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DescribeTemplateV1Response"
+              "$ref": "#/definitions/v1CreateLocationV1Response"
             }
           },
           "default": {
@@ -36,20 +36,140 @@
         },
         "parameters": [
           {
-            "name": "templateId",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string",
-            "format": "uint64"
+            "schema": {
+              "$ref": "#/definitions/v1CreateLocationV1Request"
+            }
           }
         ],
         "tags": [
-          "OmpTemplateApiService"
+          "LgcLocationApiService"
+        ]
+      }
+    },
+    "/v1/locations/describe": {
+      "post": {
+        "summary": "DescribeLocationV1 - Describe a location",
+        "operationId": "LgcLocationApiService_DescribeLocationV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DescribeLocationV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DescribeLocationV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "LgcLocationApiService"
+        ]
+      }
+    },
+    "/v1/locations/list": {
+      "post": {
+        "summary": "ListLocationsV1 - List locations",
+        "operationId": "LgcLocationApiService_ListLocationsV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListLocationsV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListLocationsV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "LgcLocationApiService"
+        ]
+      }
+    },
+    "/v1/locations/remove": {
+      "post": {
+        "summary": "RemoveLocationV1 - Remove a location",
+        "operationId": "LgcLocationApiService_RemoveLocationV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveLocationV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RemoveLocationV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "LgcLocationApiService"
         ]
       }
     }
   },
   "definitions": {
+    "lgc_location_apiv1Location": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "double"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "double"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -80,28 +200,76 @@
         }
       }
     },
-    "v1DescribeTemplateV1Response": {
+    "v1CreateLocationV1Request": {
       "type": "object",
       "properties": {
-        "value": {
-          "$ref": "#/definitions/v1Template"
+        "latitude": {
+          "type": "number",
+          "format": "double"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "double"
+        },
+        "title": {
+          "type": "string"
         }
       }
     },
-    "v1Template": {
+    "v1CreateLocationV1Response": {
       "type": "object",
       "properties": {
-        "id": {
+        "locationId": {
           "type": "string",
           "format": "uint64"
-        },
-        "foo": {
+        }
+      }
+    },
+    "v1DescribeLocationV1Request": {
+      "type": "object",
+      "properties": {
+        "locationId": {
           "type": "string",
           "format": "uint64"
-        },
-        "created": {
+        }
+      }
+    },
+    "v1DescribeLocationV1Response": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "$ref": "#/definitions/lgc_location_apiv1Location"
+        }
+      }
+    },
+    "v1ListLocationsV1Request": {
+      "type": "object"
+    },
+    "v1ListLocationsV1Response": {
+      "type": "object",
+      "properties": {
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/lgc_location_apiv1Location"
+          }
+        }
+      }
+    },
+    "v1RemoveLocationV1Request": {
+      "type": "object",
+      "properties": {
+        "locationId": {
           "type": "string",
-          "format": "date-time"
+          "format": "uint64"
+        }
+      }
+    },
+    "v1RemoveLocationV1Response": {
+      "type": "object",
+      "properties": {
+        "found": {
+          "type": "boolean"
         }
       }
     }

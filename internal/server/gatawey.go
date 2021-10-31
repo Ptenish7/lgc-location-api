@@ -42,7 +42,7 @@ func createGatewayServer(grpcAddr, gatewayAddr string) *http.Server {
 	}
 
 	mux := runtime.NewServeMux()
-	if err := pb.RegisterOmpTemplateApiServiceHandler(context.Background(), mux, conn); err != nil {
+	if err := pb.RegisterLgcLocationApiServiceHandler(context.Background(), mux, conn); err != nil {
 		log.Fatal().Err(err).Msg("Failed registration handler")
 	}
 
