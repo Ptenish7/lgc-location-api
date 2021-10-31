@@ -17,7 +17,7 @@ type Consumer interface {
 
 type consumer struct {
 	n      uint64
-	events chan<- []model.LocationEvent
+	events chan<- model.LocationEvent
 
 	repo repo.EventRepo
 
@@ -29,7 +29,7 @@ type consumer struct {
 
 type Config struct {
 	n         uint64
-	events    chan<- []model.LocationEvent
+	events    chan<- model.LocationEvent
 	repo      repo.EventRepo
 	batchSize uint64
 	timeout   time.Duration
@@ -40,7 +40,7 @@ func NewDbConsumer(
 	batchSize uint64,
 	consumeTimeout time.Duration,
 	repo repo.EventRepo,
-	events chan<- []model.LocationEvent,
+	events chan<- model.LocationEvent,
 ) Consumer {
 	wg := &sync.WaitGroup{}
 
@@ -82,7 +82,9 @@ func (c *consumer) consume(ctx context.Context) {
 			}
 
 			log.Printf("locked %d events", len(events))
-			c.events <- events
+			for _, event := range events {
+				c.events <- event
+			}
 
 		case <-ctx.Done():
 			return

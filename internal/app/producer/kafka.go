@@ -25,7 +25,7 @@ type producer struct {
 
 	repo   repo.EventRepo
 	sender sender.EventSender
-	events <-chan []model.LocationEvent
+	events <-chan model.LocationEvent
 
 	workerPool *workerpool.WorkerPool
 
@@ -37,7 +37,7 @@ func NewKafkaProducer(
 	batchSize uint64,
 	repo repo.EventRepo,
 	sender sender.EventSender,
-	events <-chan []model.LocationEvent,
+	events <-chan model.LocationEvent,
 	workerPool *workerpool.WorkerPool,
 ) Producer {
 	wg := &sync.WaitGroup{}
@@ -73,31 +73,29 @@ func (p *producer) produce(ctx context.Context) {
 
 	for {
 		select {
-		case events := <-p.events:
-			for _, event := range events {
-				if event.Type == model.Created {
-					if err := p.sender.Send(&event); err != nil {
-						log.Printf("failed to send event: %v", err)
-						updateBatch = append(updateBatch, event.ID)
-						if len(updateBatch) == cap(updateBatch) {
-							p.update(updateBatch)
-							updateBatch = updateBatch[:0]
-						}
-					} else {
-						cleanBatch = append(cleanBatch, event.ID)
-						if len(cleanBatch) == cap(cleanBatch) {
-							p.clean(cleanBatch)
-							cleanBatch = cleanBatch[:0]
-						}
+		case event := <-p.events:
+			if event.Type == model.Created {
+				if err := p.sender.Send(&event); err != nil {
+					log.Printf("failed to send event: %v", err)
+					updateBatch = append(updateBatch, event.ID)
+					if len(updateBatch) == int(p.batchSize) {
+						p.update(updateBatch)
+						updateBatch = updateBatch[:0]
+					}
+				} else {
+					cleanBatch = append(cleanBatch, event.ID)
+					if len(cleanBatch) == int(p.batchSize) {
+						p.clean(cleanBatch)
+						cleanBatch = cleanBatch[:0]
 					}
 				}
 			}
 
 		case <-ctx.Done():
-			if len(updateBatch) != 0 {
+			if len(updateBatch) > 0 {
 				p.update(updateBatch)
 			}
-			if len(cleanBatch) != 0 {
+			if len(cleanBatch) > 0 {
 				p.clean(cleanBatch)
 			}
 			return
