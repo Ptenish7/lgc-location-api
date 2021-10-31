@@ -17,6 +17,7 @@ func main() {
 		ConsumerSize:  10,
 		ProducerCount: 28,
 		WorkerCount:   2,
+		BatchSize:     1,
 	}
 
 	rt := retranslator.NewRetranslator(cfg)
