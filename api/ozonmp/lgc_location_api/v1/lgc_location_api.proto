@@ -28,9 +28,9 @@ message Location {
 }
 
 message CreateLocationV1Request {
-  double latitude = 1;
-  double longitude = 2;
-  string title = 3;
+  double latitude = 1 [(validate.rules).double = {gte: -90, lte: 90}];
+  double longitude = 2 [(validate.rules).double = {gte: -180, lte: 180}];
+  string title = 3 [(validate.rules).string.min_len = 1];
 }
 
 message CreateLocationV1Response {
@@ -38,7 +38,7 @@ message CreateLocationV1Response {
 }
 
 message DescribeLocationV1Request {
-  uint64 location_id = 1;
+  uint64 location_id = 1 [(validate.rules).uint64.gt = 0];
 }
 
 message DescribeLocationV1Response {
@@ -52,7 +52,7 @@ message ListLocationsV1Response {
 }
 
 message RemoveLocationV1Request {
-  uint64 location_id = 1;
+  uint64 location_id = 1 [(validate.rules).uint64.gt = 0];
 }
 
 message RemoveLocationV1Response {
