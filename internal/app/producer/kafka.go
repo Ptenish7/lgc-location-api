@@ -1,6 +1,7 @@
 package producer
 
 import (
+	"context"
 	"log"
 	"sync"
 	"time"
@@ -13,13 +14,14 @@ import (
 )
 
 type Producer interface {
-	Start()
+	Start(ctx context.Context)
 	Close()
 }
 
 type producer struct {
-	n       uint64
-	timeout time.Duration
+	n         uint64
+	timeout   time.Duration
+	batchSize uint64
 
 	repo   repo.EventRepo
 	sender sender.EventSender
@@ -27,69 +29,92 @@ type producer struct {
 
 	workerPool *workerpool.WorkerPool
 
-	wg   *sync.WaitGroup
-	done chan bool
+	wg *sync.WaitGroup
 }
 
 func NewKafkaProducer(
 	n uint64,
+	batchSize uint64,
 	repo repo.EventRepo,
 	sender sender.EventSender,
 	events <-chan model.LocationEvent,
 	workerPool *workerpool.WorkerPool,
 ) Producer {
 	wg := &sync.WaitGroup{}
-	done := make(chan bool)
 
 	return &producer{
 		n:          n,
+		batchSize:  batchSize,
 		repo:       repo,
 		sender:     sender,
 		events:     events,
 		workerPool: workerPool,
 		wg:         wg,
-		done:       done,
 	}
 }
 
-func (p *producer) Start() {
+func (p *producer) Start(ctx context.Context) {
 	for i := uint64(0); i < p.n; i++ {
 		p.wg.Add(1)
 		go func() {
 			defer p.wg.Done()
-			p.produce()
+			p.produce(ctx)
 		}()
 	}
 }
 
 func (p *producer) Close() {
-	close(p.done)
 	p.wg.Wait()
 }
 
-func (p *producer) produce() {
+func (p *producer) produce(ctx context.Context) {
+	updateBatch := make([]uint64, 0, p.batchSize)
+	cleanBatch := make([]uint64, 0, p.batchSize)
+
 	for {
 		select {
 		case event := <-p.events:
 			if event.Type == model.Created {
 				if err := p.sender.Send(&event); err != nil {
 					log.Printf("failed to send event: %v", err)
-					p.workerPool.Submit(func() {
-						if err := p.repo.Unlock([]uint64{event.ID}); err != nil {
-							log.Printf("failed to unlock events: %v", err)
-						}
-					})
+					updateBatch = append(updateBatch, event.ID)
+					if len(updateBatch) == int(p.batchSize) {
+						p.update(updateBatch)
+						updateBatch = updateBatch[:0]
+					}
 				} else {
-					p.workerPool.Submit(func() {
-						if err := p.repo.Remove([]uint64{event.ID}); err != nil {
-							log.Printf("failed to remove events: %v", err)
-						}
-					})
+					cleanBatch = append(cleanBatch, event.ID)
+					if len(cleanBatch) == int(p.batchSize) {
+						p.clean(cleanBatch)
+						cleanBatch = cleanBatch[:0]
+					}
 				}
 			}
 
-		case <-p.done:
+		case <-ctx.Done():
+			if len(updateBatch) > 0 {
+				p.update(updateBatch)
+			}
+			if len(cleanBatch) > 0 {
+				p.clean(cleanBatch)
+			}
 			return
 		}
 	}
+}
+
+func (p *producer) update(eventIDs []uint64) {
+	p.workerPool.Submit(func() {
+		if err := p.repo.Unlock(eventIDs); err != nil {
+			log.Printf("failed to unlock events: %v", err)
+		}
+	})
+}
+
+func (p *producer) clean(eventIDs []uint64) {
+	p.workerPool.Submit(func() {
+		if err := p.repo.Remove(eventIDs); err != nil {
+			log.Printf("failed to remove events: %v", err)
+		}
+	})
 }
