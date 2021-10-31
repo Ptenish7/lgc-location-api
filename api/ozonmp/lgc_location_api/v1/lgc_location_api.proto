@@ -11,13 +11,33 @@ option go_package = "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc
 // LgcLocationApiService - Service for working with locations
 service LgcLocationApiService {
   // CreateLocationV1 - Create a location
-  rpc CreateLocationV1(CreateLocationV1Request) returns (CreateLocationV1Response);
+  rpc CreateLocationV1(CreateLocationV1Request) returns (CreateLocationV1Response) {
+    option (google.api.http) = {
+      post: "/v1/locations/create"
+      body: "*"
+    };
+  }
   // DescribeLocationV1 - Describe a location
-  rpc DescribeLocationV1(DescribeLocationV1Request) returns (DescribeLocationV1Response);
+  rpc DescribeLocationV1(DescribeLocationV1Request) returns (DescribeLocationV1Response) {
+    option (google.api.http) = {
+      post: "/v1/locations/describe"
+      body: "*"
+    };
+  }
   // ListLocationsV1 - List locations
-  rpc ListLocationsV1(ListLocationsV1Request) returns (ListLocationsV1Response);
+  rpc ListLocationsV1(ListLocationsV1Request) returns (ListLocationsV1Response) {
+    option (google.api.http) = {
+      post: "/v1/locations/list"
+      body: "*"
+    };
+  }
   // RemoveLocationV1 - Remove a location
-  rpc RemoveLocationV1(RemoveLocationV1Request) returns (RemoveLocationV1Response);
+  rpc RemoveLocationV1(RemoveLocationV1Request) returns (RemoveLocationV1Response) {
+    option (google.api.http) = {
+      post: "/v1/locations/remove"
+      body: "*"
+    };
+  }
 }
 
 message Location {
