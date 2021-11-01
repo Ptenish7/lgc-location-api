@@ -4,7 +4,6 @@ package ozonmp.lgc_location_api.v1;
 
 import "validate/validate.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_api";
 
