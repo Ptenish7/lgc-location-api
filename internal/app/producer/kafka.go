@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"sync"
-	"time"
 
 	"github.com/gammazero/workerpool"
 
@@ -13,14 +12,15 @@ import (
 	"github.com/ozonmp/lgc-location-api/internal/model"
 )
 
+// Producer interface
 type Producer interface {
 	Start(ctx context.Context)
 	Close()
 }
 
 type producer struct {
-	n         uint64
-	timeout   time.Duration
+	n uint64
+	//timeout   time.Duration
 	batchSize uint64
 
 	repo   repo.EventRepo

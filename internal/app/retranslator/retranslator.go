@@ -13,11 +13,13 @@ import (
 	"github.com/ozonmp/lgc-location-api/internal/model"
 )
 
+// Retranslator interface
 type Retranslator interface {
 	Start()
 	Close()
 }
 
+// Config represents retranslator config
 type Config struct {
 	ChannelSize uint64
 
@@ -41,6 +43,7 @@ type retranslator struct {
 	cancelFunc context.CancelFunc
 }
 
+// NewRetranslator creates new retranslator
 func NewRetranslator(cfg Config) Retranslator {
 	events := make(chan model.LocationEvent, cfg.ChannelSize)
 	workerPool := workerpool.New(cfg.WorkerCount)
