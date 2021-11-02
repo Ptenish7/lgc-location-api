@@ -33,33 +33,27 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on Template with the rules defined in the
+// Validate checks the field values on Location with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
-func (m *Template) Validate() error {
+func (m *Location) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	// no validation rules for Id
 
-	// no validation rules for Foo
+	// no validation rules for Latitude
 
-	if v, ok := interface{}(m.GetCreated()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return TemplateValidationError{
-				field:  "Created",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Longitude
+
+	// no validation rules for Title
 
 	return nil
 }
 
-// TemplateValidationError is the validation error returned by
-// Template.Validate if the designated constraints aren't met.
-type TemplateValidationError struct {
+// LocationValidationError is the validation error returned by
+// Location.Validate if the designated constraints aren't met.
+type LocationValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -67,22 +61,22 @@ type TemplateValidationError struct {
 }
 
 // Field function returns field value.
-func (e TemplateValidationError) Field() string { return e.field }
+func (e LocationValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e TemplateValidationError) Reason() string { return e.reason }
+func (e LocationValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e TemplateValidationError) Cause() error { return e.cause }
+func (e LocationValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e TemplateValidationError) Key() bool { return e.key }
+func (e LocationValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e TemplateValidationError) ErrorName() string { return "TemplateValidationError" }
+func (e LocationValidationError) ErrorName() string { return "LocationValidationError" }
 
 // Error satisfies the builtin error interface
-func (e TemplateValidationError) Error() string {
+func (e LocationValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -94,14 +88,14 @@ func (e TemplateValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sTemplate.%s: %s%s",
+		"invalid %sLocation.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = TemplateValidationError{}
+var _ error = LocationValidationError{}
 
 var _ interface {
 	Field() string
@@ -109,19 +103,176 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = TemplateValidationError{}
+} = LocationValidationError{}
 
-// Validate checks the field values on DescribeTemplateV1Request with the rules
+// Validate checks the field values on CreateLocationV1Request with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *DescribeTemplateV1Request) Validate() error {
+func (m *CreateLocationV1Request) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if m.GetTemplateId() <= 0 {
-		return DescribeTemplateV1RequestValidationError{
-			field:  "TemplateId",
+	if val := m.GetLatitude(); val < -90 || val > 90 {
+		return CreateLocationV1RequestValidationError{
+			field:  "Latitude",
+			reason: "value must be inside range [-90, 90]",
+		}
+	}
+
+	if val := m.GetLongitude(); val < -180 || val > 180 {
+		return CreateLocationV1RequestValidationError{
+			field:  "Longitude",
+			reason: "value must be inside range [-180, 180]",
+		}
+	}
+
+	if utf8.RuneCountInString(m.GetTitle()) < 1 {
+		return CreateLocationV1RequestValidationError{
+			field:  "Title",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
+	return nil
+}
+
+// CreateLocationV1RequestValidationError is the validation error returned by
+// CreateLocationV1Request.Validate if the designated constraints aren't met.
+type CreateLocationV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateLocationV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateLocationV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateLocationV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateLocationV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateLocationV1RequestValidationError) ErrorName() string {
+	return "CreateLocationV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateLocationV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateLocationV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateLocationV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateLocationV1RequestValidationError{}
+
+// Validate checks the field values on CreateLocationV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateLocationV1Response) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for LocationId
+
+	return nil
+}
+
+// CreateLocationV1ResponseValidationError is the validation error returned by
+// CreateLocationV1Response.Validate if the designated constraints aren't met.
+type CreateLocationV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateLocationV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateLocationV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateLocationV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateLocationV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateLocationV1ResponseValidationError) ErrorName() string {
+	return "CreateLocationV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateLocationV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateLocationV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateLocationV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateLocationV1ResponseValidationError{}
+
+// Validate checks the field values on DescribeLocationV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeLocationV1Request) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetLocationId() <= 0 {
+		return DescribeLocationV1RequestValidationError{
+			field:  "LocationId",
 			reason: "value must be greater than 0",
 		}
 	}
@@ -129,9 +280,9 @@ func (m *DescribeTemplateV1Request) Validate() error {
 	return nil
 }
 
-// DescribeTemplateV1RequestValidationError is the validation error returned by
-// DescribeTemplateV1Request.Validate if the designated constraints aren't met.
-type DescribeTemplateV1RequestValidationError struct {
+// DescribeLocationV1RequestValidationError is the validation error returned by
+// DescribeLocationV1Request.Validate if the designated constraints aren't met.
+type DescribeLocationV1RequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -139,24 +290,24 @@ type DescribeTemplateV1RequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e DescribeTemplateV1RequestValidationError) Field() string { return e.field }
+func (e DescribeLocationV1RequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DescribeTemplateV1RequestValidationError) Reason() string { return e.reason }
+func (e DescribeLocationV1RequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DescribeTemplateV1RequestValidationError) Cause() error { return e.cause }
+func (e DescribeLocationV1RequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DescribeTemplateV1RequestValidationError) Key() bool { return e.key }
+func (e DescribeLocationV1RequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DescribeTemplateV1RequestValidationError) ErrorName() string {
-	return "DescribeTemplateV1RequestValidationError"
+func (e DescribeLocationV1RequestValidationError) ErrorName() string {
+	return "DescribeLocationV1RequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e DescribeTemplateV1RequestValidationError) Error() string {
+func (e DescribeLocationV1RequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -168,14 +319,14 @@ func (e DescribeTemplateV1RequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDescribeTemplateV1Request.%s: %s%s",
+		"invalid %sDescribeLocationV1Request.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DescribeTemplateV1RequestValidationError{}
+var _ error = DescribeLocationV1RequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -183,20 +334,20 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DescribeTemplateV1RequestValidationError{}
+} = DescribeLocationV1RequestValidationError{}
 
-// Validate checks the field values on DescribeTemplateV1Response with the
+// Validate checks the field values on DescribeLocationV1Response with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *DescribeTemplateV1Response) Validate() error {
+func (m *DescribeLocationV1Response) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetValue()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetLocation()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return DescribeTemplateV1ResponseValidationError{
-				field:  "Value",
+			return DescribeLocationV1ResponseValidationError{
+				field:  "Location",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -206,9 +357,9 @@ func (m *DescribeTemplateV1Response) Validate() error {
 	return nil
 }
 
-// DescribeTemplateV1ResponseValidationError is the validation error returned
-// by DescribeTemplateV1Response.Validate if the designated constraints aren't met.
-type DescribeTemplateV1ResponseValidationError struct {
+// DescribeLocationV1ResponseValidationError is the validation error returned
+// by DescribeLocationV1Response.Validate if the designated constraints aren't met.
+type DescribeLocationV1ResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -216,24 +367,24 @@ type DescribeTemplateV1ResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e DescribeTemplateV1ResponseValidationError) Field() string { return e.field }
+func (e DescribeLocationV1ResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DescribeTemplateV1ResponseValidationError) Reason() string { return e.reason }
+func (e DescribeLocationV1ResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DescribeTemplateV1ResponseValidationError) Cause() error { return e.cause }
+func (e DescribeLocationV1ResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DescribeTemplateV1ResponseValidationError) Key() bool { return e.key }
+func (e DescribeLocationV1ResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DescribeTemplateV1ResponseValidationError) ErrorName() string {
-	return "DescribeTemplateV1ResponseValidationError"
+func (e DescribeLocationV1ResponseValidationError) ErrorName() string {
+	return "DescribeLocationV1ResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e DescribeTemplateV1ResponseValidationError) Error() string {
+func (e DescribeLocationV1ResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -245,14 +396,14 @@ func (e DescribeTemplateV1ResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDescribeTemplateV1Response.%s: %s%s",
+		"invalid %sDescribeLocationV1Response.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DescribeTemplateV1ResponseValidationError{}
+var _ error = DescribeLocationV1ResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -260,4 +411,296 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DescribeTemplateV1ResponseValidationError{}
+} = DescribeLocationV1ResponseValidationError{}
+
+// Validate checks the field values on ListLocationsV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListLocationsV1Request) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// ListLocationsV1RequestValidationError is the validation error returned by
+// ListLocationsV1Request.Validate if the designated constraints aren't met.
+type ListLocationsV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListLocationsV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListLocationsV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListLocationsV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListLocationsV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListLocationsV1RequestValidationError) ErrorName() string {
+	return "ListLocationsV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListLocationsV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListLocationsV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListLocationsV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListLocationsV1RequestValidationError{}
+
+// Validate checks the field values on ListLocationsV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListLocationsV1Response) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetLocations() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListLocationsV1ResponseValidationError{
+					field:  fmt.Sprintf("Locations[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ListLocationsV1ResponseValidationError is the validation error returned by
+// ListLocationsV1Response.Validate if the designated constraints aren't met.
+type ListLocationsV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListLocationsV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListLocationsV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListLocationsV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListLocationsV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListLocationsV1ResponseValidationError) ErrorName() string {
+	return "ListLocationsV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListLocationsV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListLocationsV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListLocationsV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListLocationsV1ResponseValidationError{}
+
+// Validate checks the field values on RemoveLocationV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RemoveLocationV1Request) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetLocationId() <= 0 {
+		return RemoveLocationV1RequestValidationError{
+			field:  "LocationId",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	return nil
+}
+
+// RemoveLocationV1RequestValidationError is the validation error returned by
+// RemoveLocationV1Request.Validate if the designated constraints aren't met.
+type RemoveLocationV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RemoveLocationV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RemoveLocationV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RemoveLocationV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RemoveLocationV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RemoveLocationV1RequestValidationError) ErrorName() string {
+	return "RemoveLocationV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RemoveLocationV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRemoveLocationV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RemoveLocationV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RemoveLocationV1RequestValidationError{}
+
+// Validate checks the field values on RemoveLocationV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RemoveLocationV1Response) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Found
+
+	return nil
+}
+
+// RemoveLocationV1ResponseValidationError is the validation error returned by
+// RemoveLocationV1Response.Validate if the designated constraints aren't met.
+type RemoveLocationV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RemoveLocationV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RemoveLocationV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RemoveLocationV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RemoveLocationV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RemoveLocationV1ResponseValidationError) ErrorName() string {
+	return "RemoveLocationV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RemoveLocationV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRemoveLocationV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RemoveLocationV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RemoveLocationV1ResponseValidationError{}

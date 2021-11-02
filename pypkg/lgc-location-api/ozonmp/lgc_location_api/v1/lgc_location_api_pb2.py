@@ -22,42 +22,49 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'ZHgithub.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_api',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n1ozonmp/lgc_location_api/v1/lgc_location_api.proto\x12\x1aozonmp.lgc_location_api.v1\x1a\x17validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"b\n\x08Template\x12\x0e\n\x02id\x18\x01 \x01(\x04R\x02id\x12\x10\n\x03\x66oo\x18\x02 \x01(\x04R\x03\x66oo\x12\x34\n\x07\x63reated\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x07\x63reated\"E\n\x19\x44\x65scribeTemplateV1Request\x12(\n\x0btemplate_id\x18\x01 \x01(\x04\x42\x07\xfa\x42\x04\x32\x02 \x00R\ntemplateId\"X\n\x1a\x44\x65scribeTemplateV1Response\x12:\n\x05value\x18\x01 \x01(\x0b\x32$.ozonmp.lgc_location_api.v1.TemplateR\x05value2\xc2\x01\n\x15OmpTemplateApiService\x12\xa8\x01\n\x12\x44\x65scribeTemplateV1\x12\x35.ozonmp.lgc_location_api.v1.DescribeTemplateV1Request\x1a\x36.ozonmp.lgc_location_api.v1.DescribeTemplateV1Response\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/templates/{template_id}BJZHgithub.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_apib\x06proto3'
+  serialized_pb=b'\n1ozonmp/lgc_location_api/v1/lgc_location_api.proto\x12\x1aozonmp.lgc_location_api.v1\x1a\x17validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"j\n\x08Location\x12\x0e\n\x02id\x18\x01 \x01(\x04R\x02id\x12\x1a\n\x08latitude\x18\x02 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x03 \x01(\x01R\tlongitude\x12\x14\n\x05title\x18\x04 \x01(\tR\x05title\"\xa4\x01\n\x17\x43reateLocationV1Request\x12\x33\n\x08latitude\x18\x01 \x01(\x01\x42\x17\xfa\x42\x14\x12\x12\x19\x00\x00\x00\x00\x00\x80V@)\x00\x00\x00\x00\x00\x80V\xc0R\x08latitude\x12\x35\n\tlongitude\x18\x02 \x01(\x01\x42\x17\xfa\x42\x14\x12\x12\x19\x00\x00\x00\x00\x00\x80\x66@)\x00\x00\x00\x00\x00\x80\x66\xc0R\tlongitude\x12\x1d\n\x05title\x18\x03 \x01(\tB\x07\xfa\x42\x04r\x02\x10\x01R\x05title\";\n\x18\x43reateLocationV1Response\x12\x1f\n\x0blocation_id\x18\x01 \x01(\x04R\nlocationId\"E\n\x19\x44\x65scribeLocationV1Request\x12(\n\x0blocation_id\x18\x01 \x01(\x04\x42\x07\xfa\x42\x04\x32\x02 \x00R\nlocationId\"^\n\x1a\x44\x65scribeLocationV1Response\x12@\n\x08location\x18\x01 \x01(\x0b\x32$.ozonmp.lgc_location_api.v1.LocationR\x08location\"\x18\n\x16ListLocationsV1Request\"]\n\x17ListLocationsV1Response\x12\x42\n\tlocations\x18\x01 \x03(\x0b\x32$.ozonmp.lgc_location_api.v1.LocationR\tlocations\"C\n\x17RemoveLocationV1Request\x12(\n\x0blocation_id\x18\x01 \x01(\x04\x42\x07\xfa\x42\x04\x32\x02 \x00R\nlocationId\"0\n\x18RemoveLocationV1Response\x12\x14\n\x05\x66ound\x18\x01 \x01(\x08R\x05\x66ound2\x9e\x05\n\x15LgcLocationApiService\x12\x9e\x01\n\x10\x43reateLocationV1\x12\x33.ozonmp.lgc_location_api.v1.CreateLocationV1Request\x1a\x34.ozonmp.lgc_location_api.v1.CreateLocationV1Response\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/locations/create:\x01*\x12\xa6\x01\n\x12\x44\x65scribeLocationV1\x12\x35.ozonmp.lgc_location_api.v1.DescribeLocationV1Request\x1a\x36.ozonmp.lgc_location_api.v1.DescribeLocationV1Response\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/locations/describe:\x01*\x12\x99\x01\n\x0fListLocationsV1\x12\x32.ozonmp.lgc_location_api.v1.ListLocationsV1Request\x1a\x33.ozonmp.lgc_location_api.v1.ListLocationsV1Response\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/locations/list:\x01*\x12\x9e\x01\n\x10RemoveLocationV1\x12\x33.ozonmp.lgc_location_api.v1.RemoveLocationV1Request\x1a\x34.ozonmp.lgc_location_api.v1.RemoveLocationV1Response\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/locations/remove:\x01*BJZHgithub.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_apib\x06proto3'
   ,
   dependencies=[validate_dot_validate__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
 
 
 
-_TEMPLATE = _descriptor.Descriptor(
-  name='Template',
-  full_name='ozonmp.lgc_location_api.v1.Template',
+_LOCATION = _descriptor.Descriptor(
+  name='Location',
+  full_name='ozonmp.lgc_location_api.v1.Location',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='id', full_name='ozonmp.lgc_location_api.v1.Template.id', index=0,
+      name='id', full_name='ozonmp.lgc_location_api.v1.Location.id', index=0,
       number=1, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, json_name='id', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='foo', full_name='ozonmp.lgc_location_api.v1.Template.foo', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
+      name='latitude', full_name='ozonmp.lgc_location_api.v1.Location.latitude', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='foo', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, json_name='latitude', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='created', full_name='ozonmp.lgc_location_api.v1.Template.created', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='longitude', full_name='ozonmp.lgc_location_api.v1.Location.longitude', index=2,
+      number=3, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='created', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, json_name='longitude', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='title', full_name='ozonmp.lgc_location_api.v1.Location.title', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='title', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -71,25 +78,71 @@ _TEMPLATE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=169,
-  serialized_end=267,
+  serialized_end=275,
 )
 
 
-_DESCRIBETEMPLATEV1REQUEST = _descriptor.Descriptor(
-  name='DescribeTemplateV1Request',
-  full_name='ozonmp.lgc_location_api.v1.DescribeTemplateV1Request',
+_CREATELOCATIONV1REQUEST = _descriptor.Descriptor(
+  name='CreateLocationV1Request',
+  full_name='ozonmp.lgc_location_api.v1.CreateLocationV1Request',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='template_id', full_name='ozonmp.lgc_location_api.v1.DescribeTemplateV1Request.template_id', index=0,
+      name='latitude', full_name='ozonmp.lgc_location_api.v1.CreateLocationV1Request.latitude', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\372B\024\022\022\031\000\000\000\000\000\200V@)\000\000\000\000\000\200V\300', json_name='latitude', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='longitude', full_name='ozonmp.lgc_location_api.v1.CreateLocationV1Request.longitude', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\372B\024\022\022\031\000\000\000\000\000\200f@)\000\000\000\000\000\200f\300', json_name='longitude', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='title', full_name='ozonmp.lgc_location_api.v1.CreateLocationV1Request.title', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\372B\004r\002\020\001', json_name='title', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=278,
+  serialized_end=442,
+)
+
+
+_CREATELOCATIONV1RESPONSE = _descriptor.Descriptor(
+  name='CreateLocationV1Response',
+  full_name='ozonmp.lgc_location_api.v1.CreateLocationV1Response',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='location_id', full_name='ozonmp.lgc_location_api.v1.CreateLocationV1Response.location_id', index=0,
       number=1, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=b'\372B\0042\002 \000', json_name='templateId', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, json_name='locationId', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -102,26 +155,26 @@ _DESCRIBETEMPLATEV1REQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=269,
-  serialized_end=338,
+  serialized_start=444,
+  serialized_end=503,
 )
 
 
-_DESCRIBETEMPLATEV1RESPONSE = _descriptor.Descriptor(
-  name='DescribeTemplateV1Response',
-  full_name='ozonmp.lgc_location_api.v1.DescribeTemplateV1Response',
+_DESCRIBELOCATIONV1REQUEST = _descriptor.Descriptor(
+  name='DescribeLocationV1Request',
+  full_name='ozonmp.lgc_location_api.v1.DescribeLocationV1Request',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='value', full_name='ozonmp.lgc_location_api.v1.DescribeTemplateV1Response.value', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='location_id', full_name='ozonmp.lgc_location_api.v1.DescribeLocationV1Request.location_id', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, json_name='value', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=b'\372B\0042\002 \000', json_name='locationId', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -134,65 +187,300 @@ _DESCRIBETEMPLATEV1RESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=340,
-  serialized_end=428,
+  serialized_start=505,
+  serialized_end=574,
 )
 
-_TEMPLATE.fields_by_name['created'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_DESCRIBETEMPLATEV1RESPONSE.fields_by_name['value'].message_type = _TEMPLATE
-DESCRIPTOR.message_types_by_name['Template'] = _TEMPLATE
-DESCRIPTOR.message_types_by_name['DescribeTemplateV1Request'] = _DESCRIBETEMPLATEV1REQUEST
-DESCRIPTOR.message_types_by_name['DescribeTemplateV1Response'] = _DESCRIBETEMPLATEV1RESPONSE
+
+_DESCRIBELOCATIONV1RESPONSE = _descriptor.Descriptor(
+  name='DescribeLocationV1Response',
+  full_name='ozonmp.lgc_location_api.v1.DescribeLocationV1Response',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='location', full_name='ozonmp.lgc_location_api.v1.DescribeLocationV1Response.location', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='location', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=576,
+  serialized_end=670,
+)
+
+
+_LISTLOCATIONSV1REQUEST = _descriptor.Descriptor(
+  name='ListLocationsV1Request',
+  full_name='ozonmp.lgc_location_api.v1.ListLocationsV1Request',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=672,
+  serialized_end=696,
+)
+
+
+_LISTLOCATIONSV1RESPONSE = _descriptor.Descriptor(
+  name='ListLocationsV1Response',
+  full_name='ozonmp.lgc_location_api.v1.ListLocationsV1Response',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='locations', full_name='ozonmp.lgc_location_api.v1.ListLocationsV1Response.locations', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='locations', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=698,
+  serialized_end=791,
+)
+
+
+_REMOVELOCATIONV1REQUEST = _descriptor.Descriptor(
+  name='RemoveLocationV1Request',
+  full_name='ozonmp.lgc_location_api.v1.RemoveLocationV1Request',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='location_id', full_name='ozonmp.lgc_location_api.v1.RemoveLocationV1Request.location_id', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\372B\0042\002 \000', json_name='locationId', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=793,
+  serialized_end=860,
+)
+
+
+_REMOVELOCATIONV1RESPONSE = _descriptor.Descriptor(
+  name='RemoveLocationV1Response',
+  full_name='ozonmp.lgc_location_api.v1.RemoveLocationV1Response',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='found', full_name='ozonmp.lgc_location_api.v1.RemoveLocationV1Response.found', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, json_name='found', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=862,
+  serialized_end=910,
+)
+
+_DESCRIBELOCATIONV1RESPONSE.fields_by_name['location'].message_type = _LOCATION
+_LISTLOCATIONSV1RESPONSE.fields_by_name['locations'].message_type = _LOCATION
+DESCRIPTOR.message_types_by_name['Location'] = _LOCATION
+DESCRIPTOR.message_types_by_name['CreateLocationV1Request'] = _CREATELOCATIONV1REQUEST
+DESCRIPTOR.message_types_by_name['CreateLocationV1Response'] = _CREATELOCATIONV1RESPONSE
+DESCRIPTOR.message_types_by_name['DescribeLocationV1Request'] = _DESCRIBELOCATIONV1REQUEST
+DESCRIPTOR.message_types_by_name['DescribeLocationV1Response'] = _DESCRIBELOCATIONV1RESPONSE
+DESCRIPTOR.message_types_by_name['ListLocationsV1Request'] = _LISTLOCATIONSV1REQUEST
+DESCRIPTOR.message_types_by_name['ListLocationsV1Response'] = _LISTLOCATIONSV1RESPONSE
+DESCRIPTOR.message_types_by_name['RemoveLocationV1Request'] = _REMOVELOCATIONV1REQUEST
+DESCRIPTOR.message_types_by_name['RemoveLocationV1Response'] = _REMOVELOCATIONV1RESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-Template = _reflection.GeneratedProtocolMessageType('Template', (_message.Message,), {
-  'DESCRIPTOR' : _TEMPLATE,
+Location = _reflection.GeneratedProtocolMessageType('Location', (_message.Message,), {
+  'DESCRIPTOR' : _LOCATION,
   '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
-  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.Template)
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.Location)
   })
-_sym_db.RegisterMessage(Template)
+_sym_db.RegisterMessage(Location)
 
-DescribeTemplateV1Request = _reflection.GeneratedProtocolMessageType('DescribeTemplateV1Request', (_message.Message,), {
-  'DESCRIPTOR' : _DESCRIBETEMPLATEV1REQUEST,
+CreateLocationV1Request = _reflection.GeneratedProtocolMessageType('CreateLocationV1Request', (_message.Message,), {
+  'DESCRIPTOR' : _CREATELOCATIONV1REQUEST,
   '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
-  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.DescribeTemplateV1Request)
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.CreateLocationV1Request)
   })
-_sym_db.RegisterMessage(DescribeTemplateV1Request)
+_sym_db.RegisterMessage(CreateLocationV1Request)
 
-DescribeTemplateV1Response = _reflection.GeneratedProtocolMessageType('DescribeTemplateV1Response', (_message.Message,), {
-  'DESCRIPTOR' : _DESCRIBETEMPLATEV1RESPONSE,
+CreateLocationV1Response = _reflection.GeneratedProtocolMessageType('CreateLocationV1Response', (_message.Message,), {
+  'DESCRIPTOR' : _CREATELOCATIONV1RESPONSE,
   '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
-  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.DescribeTemplateV1Response)
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.CreateLocationV1Response)
   })
-_sym_db.RegisterMessage(DescribeTemplateV1Response)
+_sym_db.RegisterMessage(CreateLocationV1Response)
+
+DescribeLocationV1Request = _reflection.GeneratedProtocolMessageType('DescribeLocationV1Request', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBELOCATIONV1REQUEST,
+  '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.DescribeLocationV1Request)
+  })
+_sym_db.RegisterMessage(DescribeLocationV1Request)
+
+DescribeLocationV1Response = _reflection.GeneratedProtocolMessageType('DescribeLocationV1Response', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBELOCATIONV1RESPONSE,
+  '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.DescribeLocationV1Response)
+  })
+_sym_db.RegisterMessage(DescribeLocationV1Response)
+
+ListLocationsV1Request = _reflection.GeneratedProtocolMessageType('ListLocationsV1Request', (_message.Message,), {
+  'DESCRIPTOR' : _LISTLOCATIONSV1REQUEST,
+  '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.ListLocationsV1Request)
+  })
+_sym_db.RegisterMessage(ListLocationsV1Request)
+
+ListLocationsV1Response = _reflection.GeneratedProtocolMessageType('ListLocationsV1Response', (_message.Message,), {
+  'DESCRIPTOR' : _LISTLOCATIONSV1RESPONSE,
+  '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.ListLocationsV1Response)
+  })
+_sym_db.RegisterMessage(ListLocationsV1Response)
+
+RemoveLocationV1Request = _reflection.GeneratedProtocolMessageType('RemoveLocationV1Request', (_message.Message,), {
+  'DESCRIPTOR' : _REMOVELOCATIONV1REQUEST,
+  '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.RemoveLocationV1Request)
+  })
+_sym_db.RegisterMessage(RemoveLocationV1Request)
+
+RemoveLocationV1Response = _reflection.GeneratedProtocolMessageType('RemoveLocationV1Response', (_message.Message,), {
+  'DESCRIPTOR' : _REMOVELOCATIONV1RESPONSE,
+  '__module__' : 'ozonmp.lgc_location_api.v1.lgc_location_api_pb2'
+  # @@protoc_insertion_point(class_scope:ozonmp.lgc_location_api.v1.RemoveLocationV1Response)
+  })
+_sym_db.RegisterMessage(RemoveLocationV1Response)
 
 
 DESCRIPTOR._options = None
-_DESCRIBETEMPLATEV1REQUEST.fields_by_name['template_id']._options = None
+_CREATELOCATIONV1REQUEST.fields_by_name['latitude']._options = None
+_CREATELOCATIONV1REQUEST.fields_by_name['longitude']._options = None
+_CREATELOCATIONV1REQUEST.fields_by_name['title']._options = None
+_DESCRIBELOCATIONV1REQUEST.fields_by_name['location_id']._options = None
+_REMOVELOCATIONV1REQUEST.fields_by_name['location_id']._options = None
 
-_OMPTEMPLATEAPISERVICE = _descriptor.ServiceDescriptor(
-  name='OmpTemplateApiService',
-  full_name='ozonmp.lgc_location_api.v1.OmpTemplateApiService',
+_LGCLOCATIONAPISERVICE = _descriptor.ServiceDescriptor(
+  name='LgcLocationApiService',
+  full_name='ozonmp.lgc_location_api.v1.LgcLocationApiService',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=431,
-  serialized_end=625,
+  serialized_start=913,
+  serialized_end=1583,
   methods=[
   _descriptor.MethodDescriptor(
-    name='DescribeTemplateV1',
-    full_name='ozonmp.lgc_location_api.v1.OmpTemplateApiService.DescribeTemplateV1',
+    name='CreateLocationV1',
+    full_name='ozonmp.lgc_location_api.v1.LgcLocationApiService.CreateLocationV1',
     index=0,
     containing_service=None,
-    input_type=_DESCRIBETEMPLATEV1REQUEST,
-    output_type=_DESCRIBETEMPLATEV1RESPONSE,
-    serialized_options=b'\202\323\344\223\002\035\022\033/v1/templates/{template_id}',
+    input_type=_CREATELOCATIONV1REQUEST,
+    output_type=_CREATELOCATIONV1RESPONSE,
+    serialized_options=b'\202\323\344\223\002\031\"\024/v1/locations/create:\001*',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='DescribeLocationV1',
+    full_name='ozonmp.lgc_location_api.v1.LgcLocationApiService.DescribeLocationV1',
+    index=1,
+    containing_service=None,
+    input_type=_DESCRIBELOCATIONV1REQUEST,
+    output_type=_DESCRIBELOCATIONV1RESPONSE,
+    serialized_options=b'\202\323\344\223\002\033\"\026/v1/locations/describe:\001*',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='ListLocationsV1',
+    full_name='ozonmp.lgc_location_api.v1.LgcLocationApiService.ListLocationsV1',
+    index=2,
+    containing_service=None,
+    input_type=_LISTLOCATIONSV1REQUEST,
+    output_type=_LISTLOCATIONSV1RESPONSE,
+    serialized_options=b'\202\323\344\223\002\027\"\022/v1/locations/list:\001*',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='RemoveLocationV1',
+    full_name='ozonmp.lgc_location_api.v1.LgcLocationApiService.RemoveLocationV1',
+    index=3,
+    containing_service=None,
+    input_type=_REMOVELOCATIONV1REQUEST,
+    output_type=_REMOVELOCATIONV1RESPONSE,
+    serialized_options=b'\202\323\344\223\002\031\"\024/v1/locations/remove:\001*',
     create_key=_descriptor._internal_create_key,
   ),
 ])
-_sym_db.RegisterServiceDescriptor(_OMPTEMPLATEAPISERVICE)
+_sym_db.RegisterServiceDescriptor(_LGCLOCATIONAPISERVICE)
 
-DESCRIPTOR.services_by_name['OmpTemplateApiService'] = _OMPTEMPLATEAPISERVICE
+DESCRIPTOR.services_by_name['LgcLocationApiService'] = _LGCLOCATIONAPISERVICE
 
 # @@protoc_insertion_point(module_scope)

@@ -4,30 +4,76 @@ package ozonmp.lgc_location_api.v1;
 
 import "validate/validate.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_api";
 
-// OmpTemplateApiService - Service for working with templates
-service OmpTemplateApiService {
-  // DescribeTemplateV1 - Describe a template
-  rpc DescribeTemplateV1(DescribeTemplateV1Request) returns (DescribeTemplateV1Response) {
+// LgcLocationApiService - Service for working with locations
+service LgcLocationApiService {
+  // CreateLocationV1 - Create a location
+  rpc CreateLocationV1(CreateLocationV1Request) returns (CreateLocationV1Response) {
     option (google.api.http) = {
-      get: "/v1/templates/{template_id}"
+      post: "/v1/locations/create"
+      body: "*"
+    };
+  }
+  // DescribeLocationV1 - Describe a location
+  rpc DescribeLocationV1(DescribeLocationV1Request) returns (DescribeLocationV1Response) {
+    option (google.api.http) = {
+      post: "/v1/locations/describe"
+      body: "*"
+    };
+  }
+  // ListLocationsV1 - List locations
+  rpc ListLocationsV1(ListLocationsV1Request) returns (ListLocationsV1Response) {
+    option (google.api.http) = {
+      post: "/v1/locations/list"
+      body: "*"
+    };
+  }
+  // RemoveLocationV1 - Remove a location
+  rpc RemoveLocationV1(RemoveLocationV1Request) returns (RemoveLocationV1Response) {
+    option (google.api.http) = {
+      post: "/v1/locations/remove"
+      body: "*"
     };
   }
 }
 
-message Template {
-  uint64 id  = 1;
-  uint64 foo = 2;
-  google.protobuf.Timestamp created = 3;
+message Location {
+  uint64 id = 1;
+  double latitude = 2;
+  double longitude = 3;
+  string title = 4;
 }
 
-message DescribeTemplateV1Request {
-  uint64 template_id = 1 [(validate.rules).uint64.gt = 0];
+message CreateLocationV1Request {
+  double latitude = 1 [(validate.rules).double = {gte: -90, lte: 90}];
+  double longitude = 2 [(validate.rules).double = {gte: -180, lte: 180}];
+  string title = 3 [(validate.rules).string.min_len = 1];
 }
 
-message DescribeTemplateV1Response {
-  Template value = 1;
+message CreateLocationV1Response {
+  uint64 location_id = 1;
+}
+
+message DescribeLocationV1Request {
+  uint64 location_id = 1 [(validate.rules).uint64.gt = 0];
+}
+
+message DescribeLocationV1Response {
+  Location location = 1;
+}
+
+message ListLocationsV1Request {}
+
+message ListLocationsV1Response {
+  repeated Location locations = 1;
+}
+
+message RemoveLocationV1Request {
+  uint64 location_id = 1 [(validate.rules).uint64.gt = 0];
+}
+
+message RemoveLocationV1Response {
+  bool found = 1;
 }

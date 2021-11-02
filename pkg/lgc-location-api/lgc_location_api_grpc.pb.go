@@ -14,88 +14,202 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// OmpTemplateApiServiceClient is the client API for OmpTemplateApiService service.
+// LgcLocationApiServiceClient is the client API for LgcLocationApiService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type OmpTemplateApiServiceClient interface {
-	// DescribeTemplateV1 - Describe a template
-	DescribeTemplateV1(ctx context.Context, in *DescribeTemplateV1Request, opts ...grpc.CallOption) (*DescribeTemplateV1Response, error)
+type LgcLocationApiServiceClient interface {
+	// CreateLocationV1 - Create a location
+	CreateLocationV1(ctx context.Context, in *CreateLocationV1Request, opts ...grpc.CallOption) (*CreateLocationV1Response, error)
+	// DescribeLocationV1 - Describe a location
+	DescribeLocationV1(ctx context.Context, in *DescribeLocationV1Request, opts ...grpc.CallOption) (*DescribeLocationV1Response, error)
+	// ListLocationsV1 - List locations
+	ListLocationsV1(ctx context.Context, in *ListLocationsV1Request, opts ...grpc.CallOption) (*ListLocationsV1Response, error)
+	// RemoveLocationV1 - Remove a location
+	RemoveLocationV1(ctx context.Context, in *RemoveLocationV1Request, opts ...grpc.CallOption) (*RemoveLocationV1Response, error)
 }
 
-type ompTemplateApiServiceClient struct {
+type lgcLocationApiServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewOmpTemplateApiServiceClient(cc grpc.ClientConnInterface) OmpTemplateApiServiceClient {
-	return &ompTemplateApiServiceClient{cc}
+func NewLgcLocationApiServiceClient(cc grpc.ClientConnInterface) LgcLocationApiServiceClient {
+	return &lgcLocationApiServiceClient{cc}
 }
 
-func (c *ompTemplateApiServiceClient) DescribeTemplateV1(ctx context.Context, in *DescribeTemplateV1Request, opts ...grpc.CallOption) (*DescribeTemplateV1Response, error) {
-	out := new(DescribeTemplateV1Response)
-	err := c.cc.Invoke(ctx, "/ozonmp.lgc_location_api.v1.OmpTemplateApiService/DescribeTemplateV1", in, out, opts...)
+func (c *lgcLocationApiServiceClient) CreateLocationV1(ctx context.Context, in *CreateLocationV1Request, opts ...grpc.CallOption) (*CreateLocationV1Response, error) {
+	out := new(CreateLocationV1Response)
+	err := c.cc.Invoke(ctx, "/ozonmp.lgc_location_api.v1.LgcLocationApiService/CreateLocationV1", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// OmpTemplateApiServiceServer is the server API for OmpTemplateApiService service.
-// All implementations must embed UnimplementedOmpTemplateApiServiceServer
+func (c *lgcLocationApiServiceClient) DescribeLocationV1(ctx context.Context, in *DescribeLocationV1Request, opts ...grpc.CallOption) (*DescribeLocationV1Response, error) {
+	out := new(DescribeLocationV1Response)
+	err := c.cc.Invoke(ctx, "/ozonmp.lgc_location_api.v1.LgcLocationApiService/DescribeLocationV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *lgcLocationApiServiceClient) ListLocationsV1(ctx context.Context, in *ListLocationsV1Request, opts ...grpc.CallOption) (*ListLocationsV1Response, error) {
+	out := new(ListLocationsV1Response)
+	err := c.cc.Invoke(ctx, "/ozonmp.lgc_location_api.v1.LgcLocationApiService/ListLocationsV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *lgcLocationApiServiceClient) RemoveLocationV1(ctx context.Context, in *RemoveLocationV1Request, opts ...grpc.CallOption) (*RemoveLocationV1Response, error) {
+	out := new(RemoveLocationV1Response)
+	err := c.cc.Invoke(ctx, "/ozonmp.lgc_location_api.v1.LgcLocationApiService/RemoveLocationV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// LgcLocationApiServiceServer is the server API for LgcLocationApiService service.
+// All implementations must embed UnimplementedLgcLocationApiServiceServer
 // for forward compatibility
-type OmpTemplateApiServiceServer interface {
-	// DescribeTemplateV1 - Describe a template
-	DescribeTemplateV1(context.Context, *DescribeTemplateV1Request) (*DescribeTemplateV1Response, error)
-	mustEmbedUnimplementedOmpTemplateApiServiceServer()
+type LgcLocationApiServiceServer interface {
+	// CreateLocationV1 - Create a location
+	CreateLocationV1(context.Context, *CreateLocationV1Request) (*CreateLocationV1Response, error)
+	// DescribeLocationV1 - Describe a location
+	DescribeLocationV1(context.Context, *DescribeLocationV1Request) (*DescribeLocationV1Response, error)
+	// ListLocationsV1 - List locations
+	ListLocationsV1(context.Context, *ListLocationsV1Request) (*ListLocationsV1Response, error)
+	// RemoveLocationV1 - Remove a location
+	RemoveLocationV1(context.Context, *RemoveLocationV1Request) (*RemoveLocationV1Response, error)
+	mustEmbedUnimplementedLgcLocationApiServiceServer()
 }
 
-// UnimplementedOmpTemplateApiServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedOmpTemplateApiServiceServer struct {
+// UnimplementedLgcLocationApiServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedLgcLocationApiServiceServer struct {
 }
 
-func (UnimplementedOmpTemplateApiServiceServer) DescribeTemplateV1(context.Context, *DescribeTemplateV1Request) (*DescribeTemplateV1Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DescribeTemplateV1 not implemented")
+func (UnimplementedLgcLocationApiServiceServer) CreateLocationV1(context.Context, *CreateLocationV1Request) (*CreateLocationV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateLocationV1 not implemented")
 }
-func (UnimplementedOmpTemplateApiServiceServer) mustEmbedUnimplementedOmpTemplateApiServiceServer() {}
+func (UnimplementedLgcLocationApiServiceServer) DescribeLocationV1(context.Context, *DescribeLocationV1Request) (*DescribeLocationV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DescribeLocationV1 not implemented")
+}
+func (UnimplementedLgcLocationApiServiceServer) ListLocationsV1(context.Context, *ListLocationsV1Request) (*ListLocationsV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListLocationsV1 not implemented")
+}
+func (UnimplementedLgcLocationApiServiceServer) RemoveLocationV1(context.Context, *RemoveLocationV1Request) (*RemoveLocationV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveLocationV1 not implemented")
+}
+func (UnimplementedLgcLocationApiServiceServer) mustEmbedUnimplementedLgcLocationApiServiceServer() {}
 
-// UnsafeOmpTemplateApiServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to OmpTemplateApiServiceServer will
+// UnsafeLgcLocationApiServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to LgcLocationApiServiceServer will
 // result in compilation errors.
-type UnsafeOmpTemplateApiServiceServer interface {
-	mustEmbedUnimplementedOmpTemplateApiServiceServer()
+type UnsafeLgcLocationApiServiceServer interface {
+	mustEmbedUnimplementedLgcLocationApiServiceServer()
 }
 
-func RegisterOmpTemplateApiServiceServer(s grpc.ServiceRegistrar, srv OmpTemplateApiServiceServer) {
-	s.RegisterService(&OmpTemplateApiService_ServiceDesc, srv)
+func RegisterLgcLocationApiServiceServer(s grpc.ServiceRegistrar, srv LgcLocationApiServiceServer) {
+	s.RegisterService(&LgcLocationApiService_ServiceDesc, srv)
 }
 
-func _OmpTemplateApiService_DescribeTemplateV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DescribeTemplateV1Request)
+func _LgcLocationApiService_CreateLocationV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateLocationV1Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OmpTemplateApiServiceServer).DescribeTemplateV1(ctx, in)
+		return srv.(LgcLocationApiServiceServer).CreateLocationV1(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ozonmp.lgc_location_api.v1.OmpTemplateApiService/DescribeTemplateV1",
+		FullMethod: "/ozonmp.lgc_location_api.v1.LgcLocationApiService/CreateLocationV1",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OmpTemplateApiServiceServer).DescribeTemplateV1(ctx, req.(*DescribeTemplateV1Request))
+		return srv.(LgcLocationApiServiceServer).CreateLocationV1(ctx, req.(*CreateLocationV1Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// OmpTemplateApiService_ServiceDesc is the grpc.ServiceDesc for OmpTemplateApiService service.
+func _LgcLocationApiService_DescribeLocationV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeLocationV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LgcLocationApiServiceServer).DescribeLocationV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ozonmp.lgc_location_api.v1.LgcLocationApiService/DescribeLocationV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LgcLocationApiServiceServer).DescribeLocationV1(ctx, req.(*DescribeLocationV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LgcLocationApiService_ListLocationsV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListLocationsV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LgcLocationApiServiceServer).ListLocationsV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ozonmp.lgc_location_api.v1.LgcLocationApiService/ListLocationsV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LgcLocationApiServiceServer).ListLocationsV1(ctx, req.(*ListLocationsV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LgcLocationApiService_RemoveLocationV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveLocationV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LgcLocationApiServiceServer).RemoveLocationV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ozonmp.lgc_location_api.v1.LgcLocationApiService/RemoveLocationV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LgcLocationApiServiceServer).RemoveLocationV1(ctx, req.(*RemoveLocationV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// LgcLocationApiService_ServiceDesc is the grpc.ServiceDesc for LgcLocationApiService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var OmpTemplateApiService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "ozonmp.lgc_location_api.v1.OmpTemplateApiService",
-	HandlerType: (*OmpTemplateApiServiceServer)(nil),
+var LgcLocationApiService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "ozonmp.lgc_location_api.v1.LgcLocationApiService",
+	HandlerType: (*LgcLocationApiServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "DescribeTemplateV1",
-			Handler:    _OmpTemplateApiService_DescribeTemplateV1_Handler,
+			MethodName: "CreateLocationV1",
+			Handler:    _LgcLocationApiService_CreateLocationV1_Handler,
+		},
+		{
+			MethodName: "DescribeLocationV1",
+			Handler:    _LgcLocationApiService_DescribeLocationV1_Handler,
+		},
+		{
+			MethodName: "ListLocationsV1",
+			Handler:    _LgcLocationApiService_ListLocationsV1_Handler,
+		},
+		{
+			MethodName: "RemoveLocationV1",
+			Handler:    _LgcLocationApiService_RemoveLocationV1_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

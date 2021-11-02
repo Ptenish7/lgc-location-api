@@ -1,6 +1,7 @@
 package consumer
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -19,8 +20,10 @@ func TestStart(t *testing.T) {
 
 	eventsChan := make(chan model.LocationEvent, 32)
 
+	ctx, _ := context.WithCancel(context.Background())
+
 	c := NewDbConsumer(1, 1, time.Second, repo, eventsChan)
-	c.Start()
+	c.Start(ctx)
 	c.Close()
 }
 
@@ -44,8 +47,10 @@ func TestLockAndWriteToChan(t *testing.T) {
 
 	eventsChan := make(chan model.LocationEvent, 32)
 
+	ctx, _ := context.WithCancel(context.Background())
+
 	c := NewDbConsumer(1, 1, time.Second, repo, eventsChan)
-	c.Start()
+	c.Start(ctx)
 
 	e := <-eventsChan
 	if e != events[0] {

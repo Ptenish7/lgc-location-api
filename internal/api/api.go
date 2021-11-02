@@ -5,8 +5,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
-
-	"github.com/rs/zerolog/log"
+	"github.com/prometheus/common/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -16,53 +15,58 @@ import (
 )
 
 var (
-	totalTemplateNotFound = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "lgc_location_api_template_not_found_total",
-		Help: "Total number of templates that were not found",
+	_ = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "lgc_location_api_location_not_found_total",
+		Help: "Total number of locations that were not found",
 	})
 )
 
-type templateAPI struct {
-	pb.UnimplementedOmpTemplateApiServiceServer
+type locationAPI struct {
+	pb.UnimplementedLgcLocationApiServiceServer
 	repo repo.Repo
 }
 
-// NewTemplateAPI returns api of lgc-template-api service
-func NewTemplateAPI(r repo.Repo) pb.OmpTemplateApiServiceServer {
-	return &templateAPI{repo: r}
+// NewLocationAPI returns api of lgc-location-api service
+func NewLocationAPI(r repo.Repo) pb.LgcLocationApiServiceServer {
+	return &locationAPI{repo: r}
 }
 
-func (o *templateAPI) DescribeTemplateV1(
+func (l *locationAPI) CreateLocationV1(
 	ctx context.Context,
-	req *pb.DescribeTemplateV1Request,
-) (*pb.DescribeTemplateV1Response, error) {
+	req *pb.CreateLocationV1Request,
+) (*pb.CreateLocationV1Response, error) {
 
-	if err := req.Validate(); err != nil {
-		log.Error().Err(err).Msg("DescribeTemplateV1 - invalid argument")
+	log.Debug("LgcLocationApi.CreateLocation: not implemented")
 
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
+	return nil, status.Error(codes.Internal, "not implemented")
+}
 
-	template, err := o.repo.DescribeTemplate(ctx, req.TemplateId)
-	if err != nil {
-		log.Error().Err(err).Msg("DescribeTemplateV1 -- failed")
+func (l *locationAPI) DescribeLocationV1(
+	ctx context.Context,
+	req *pb.DescribeLocationV1Request,
+) (*pb.DescribeLocationV1Response, error) {
 
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	log.Debug("LgcLocationApi.DescribeLocation: not implemented")
 
-	if template == nil {
-		log.Debug().Uint64("templateId", req.TemplateId).Msg("template not found")
-		totalTemplateNotFound.Inc()
+	return nil, status.Error(codes.Internal, "not implemented")
+}
 
-		return nil, status.Error(codes.NotFound, "template not found")
-	}
+func (l *locationAPI) ListLocationsV1(
+	ctx context.Context,
+	req *pb.ListLocationsV1Request,
+) (*pb.ListLocationsV1Response, error) {
 
-	log.Debug().Msg("DescribeTemplateV1 - success")
+	log.Debug("LgcLocationApi.ListLocations: not implemented")
 
-	return &pb.DescribeTemplateV1Response{
-		Value: &pb.Template{
-			Id:  template.ID,
-			Foo: template.Foo,
-		},
-	}, nil
+	return nil, status.Error(codes.Internal, "not implemented")
+}
+
+func (l *locationAPI) RemoveLocationV1(
+	ctx context.Context,
+	req *pb.RemoveLocationV1Request,
+) (*pb.RemoveLocationV1Response, error) {
+
+	log.Debug("LgcLocationApi.RemoveLocation: not implemented")
+
+	return nil, status.Error(codes.Internal, "not implemented")
 }
