@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	totalLocationNotFound = promauto.NewCounter(prometheus.CounterOpts{
+	_ = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "lgc_location_api_location_not_found_total",
 		Help: "Total number of locations that were not found",
 	})

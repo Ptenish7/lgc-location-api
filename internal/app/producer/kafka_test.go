@@ -1,6 +1,7 @@
 package producer
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -29,8 +30,10 @@ func TestProducer(t *testing.T) {
 	eventsChan := make(chan model.LocationEvent, 32)
 	workerPool := workerpool.New(2)
 
-	p := NewKafkaProducer(1, repo, sender, eventsChan, workerPool)
-	p.Start()
+	ctx, _ := context.WithCancel(context.Background())
+
+	p := NewKafkaProducer(1, 1, repo, sender, eventsChan, workerPool)
+	p.Start(ctx)
 
 	t.Run("fail send and unlock", func(t *testing.T) {
 		eventsChan <- events[0]
