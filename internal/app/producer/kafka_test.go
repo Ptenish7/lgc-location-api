@@ -30,7 +30,7 @@ func TestProducer(t *testing.T) {
 	eventsChan := make(chan model.LocationEvent, 32)
 	workerPool := workerpool.New(2)
 
-	ctx, _ := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 
 	p := NewKafkaProducer(1, 1, repo, sender, eventsChan, workerPool)
 	p.Start(ctx)
@@ -54,5 +54,6 @@ func TestProducer(t *testing.T) {
 	})
 
 	time.Sleep(time.Second)
+	cancel()
 	p.Close()
 }

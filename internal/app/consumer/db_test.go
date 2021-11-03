@@ -20,10 +20,11 @@ func TestStart(t *testing.T) {
 
 	eventsChan := make(chan model.LocationEvent, 32)
 
-	ctx, _ := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 
 	c := NewDbConsumer(1, 1, time.Second, repo, eventsChan)
 	c.Start(ctx)
+	cancel()
 	c.Close()
 }
 
@@ -47,7 +48,7 @@ func TestLockAndWriteToChan(t *testing.T) {
 
 	eventsChan := make(chan model.LocationEvent, 32)
 
-	ctx, _ := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 
 	c := NewDbConsumer(1, 1, time.Second, repo, eventsChan)
 	c.Start(ctx)
@@ -57,5 +58,6 @@ func TestLockAndWriteToChan(t *testing.T) {
 		t.Errorf("event received from channel is not equal to locked event")
 	}
 
+	cancel()
 	c.Close()
 }
