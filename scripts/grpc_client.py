@@ -2,15 +2,15 @@ import asyncio
 
 from grpclib.client import Channel
 
-from ozonmp.lgc_location_api.v1.lgc_location_api_grpc import OmpTemplateApiServiceStub
-from ozonmp.lgc_location_api.v1.lgc_location_api_pb2 import DescribeTemplateV1Request
+from ozonmp.lgc_location_api.v1.lgc_location_api_grpc import LgcLocationApiServiceStub
+from ozonmp.lgc_location_api.v1.lgc_location_api_pb2 import DescribeLocationV1Request
 
 async def main():
     async with Channel('127.0.0.1', 8082) as channel:
-        client = OmpTemplateApiServiceStub(channel)
+        client = LgcLocationApiServiceStub(channel)
 
-        req = DescribeTemplateV1Request(template_id=1)
-        reply = await client.DescribeTemplateV1(req)
+        req = DescribeLocationV1Request(location_id=1)
+        reply = await client.DescribeLocationV1(req)
         print(reply.message)
 
 

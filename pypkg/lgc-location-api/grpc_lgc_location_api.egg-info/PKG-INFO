@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: grpc-lgc-location-api
+Version: 1.0.0
+Summary: GRPC python client for lgc-location-api
+Home-page: https://github.com/ozonmp/lgc-location-api
+Author: zaurbekzet
+Author-email: zaurbekzet@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.5
+
+UNKNOWN
+

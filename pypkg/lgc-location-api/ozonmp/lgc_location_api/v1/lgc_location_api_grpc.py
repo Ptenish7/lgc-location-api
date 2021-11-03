@@ -11,7 +11,6 @@ if typing.TYPE_CHECKING:
 
 import validate.validate_pb2
 import google.api.annotations_pb2
-import google.protobuf.timestamp_pb2
 import ozonmp.lgc_location_api.v1.lgc_location_api_pb2
 
 

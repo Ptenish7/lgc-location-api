@@ -248,6 +248,15 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
 
+  pypiserver:
+    image: pypiserver/pypiserver:latest
+    networks:
+      - ompnw
+    ports:
+      - 8083:8080
+    volumes:
+      - ./pypkg/lgc-location-api/dist:/data/packages
+
 volumes:
   pgdata:
     driver: local

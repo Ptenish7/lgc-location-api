@@ -13,7 +13,6 @@ _sym_db = _symbol_database.Default()
 
 from validate import validate_pb2 as validate_dot_validate__pb2
 from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
-from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -22,9 +21,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'ZHgithub.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_api',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n1ozonmp/lgc_location_api/v1/lgc_location_api.proto\x12\x1aozonmp.lgc_location_api.v1\x1a\x17validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"j\n\x08Location\x12\x0e\n\x02id\x18\x01 \x01(\x04R\x02id\x12\x1a\n\x08latitude\x18\x02 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x03 \x01(\x01R\tlongitude\x12\x14\n\x05title\x18\x04 \x01(\tR\x05title\"\xa4\x01\n\x17\x43reateLocationV1Request\x12\x33\n\x08latitude\x18\x01 \x01(\x01\x42\x17\xfa\x42\x14\x12\x12\x19\x00\x00\x00\x00\x00\x80V@)\x00\x00\x00\x00\x00\x80V\xc0R\x08latitude\x12\x35\n\tlongitude\x18\x02 \x01(\x01\x42\x17\xfa\x42\x14\x12\x12\x19\x00\x00\x00\x00\x00\x80\x66@)\x00\x00\x00\x00\x00\x80\x66\xc0R\tlongitude\x12\x1d\n\x05title\x18\x03 \x01(\tB\x07\xfa\x42\x04r\x02\x10\x01R\x05title\";\n\x18\x43reateLocationV1Response\x12\x1f\n\x0blocation_id\x18\x01 \x01(\x04R\nlocationId\"E\n\x19\x44\x65scribeLocationV1Request\x12(\n\x0blocation_id\x18\x01 \x01(\x04\x42\x07\xfa\x42\x04\x32\x02 \x00R\nlocationId\"^\n\x1a\x44\x65scribeLocationV1Response\x12@\n\x08location\x18\x01 \x01(\x0b\x32$.ozonmp.lgc_location_api.v1.LocationR\x08location\"\x18\n\x16ListLocationsV1Request\"]\n\x17ListLocationsV1Response\x12\x42\n\tlocations\x18\x01 \x03(\x0b\x32$.ozonmp.lgc_location_api.v1.LocationR\tlocations\"C\n\x17RemoveLocationV1Request\x12(\n\x0blocation_id\x18\x01 \x01(\x04\x42\x07\xfa\x42\x04\x32\x02 \x00R\nlocationId\"0\n\x18RemoveLocationV1Response\x12\x14\n\x05\x66ound\x18\x01 \x01(\x08R\x05\x66ound2\x9e\x05\n\x15LgcLocationApiService\x12\x9e\x01\n\x10\x43reateLocationV1\x12\x33.ozonmp.lgc_location_api.v1.CreateLocationV1Request\x1a\x34.ozonmp.lgc_location_api.v1.CreateLocationV1Response\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/locations/create:\x01*\x12\xa6\x01\n\x12\x44\x65scribeLocationV1\x12\x35.ozonmp.lgc_location_api.v1.DescribeLocationV1Request\x1a\x36.ozonmp.lgc_location_api.v1.DescribeLocationV1Response\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/locations/describe:\x01*\x12\x99\x01\n\x0fListLocationsV1\x12\x32.ozonmp.lgc_location_api.v1.ListLocationsV1Request\x1a\x33.ozonmp.lgc_location_api.v1.ListLocationsV1Response\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/locations/list:\x01*\x12\x9e\x01\n\x10RemoveLocationV1\x12\x33.ozonmp.lgc_location_api.v1.RemoveLocationV1Request\x1a\x34.ozonmp.lgc_location_api.v1.RemoveLocationV1Response\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/locations/remove:\x01*BJZHgithub.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_apib\x06proto3'
+  serialized_pb=b'\n1ozonmp/lgc_location_api/v1/lgc_location_api.proto\x12\x1aozonmp.lgc_location_api.v1\x1a\x17validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\"j\n\x08Location\x12\x0e\n\x02id\x18\x01 \x01(\x04R\x02id\x12\x1a\n\x08latitude\x18\x02 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x03 \x01(\x01R\tlongitude\x12\x14\n\x05title\x18\x04 \x01(\tR\x05title\"\xa4\x01\n\x17\x43reateLocationV1Request\x12\x33\n\x08latitude\x18\x01 \x01(\x01\x42\x17\xfa\x42\x14\x12\x12\x19\x00\x00\x00\x00\x00\x80V@)\x00\x00\x00\x00\x00\x80V\xc0R\x08latitude\x12\x35\n\tlongitude\x18\x02 \x01(\x01\x42\x17\xfa\x42\x14\x12\x12\x19\x00\x00\x00\x00\x00\x80\x66@)\x00\x00\x00\x00\x00\x80\x66\xc0R\tlongitude\x12\x1d\n\x05title\x18\x03 \x01(\tB\x07\xfa\x42\x04r\x02\x10\x01R\x05title\";\n\x18\x43reateLocationV1Response\x12\x1f\n\x0blocation_id\x18\x01 \x01(\x04R\nlocationId\"E\n\x19\x44\x65scribeLocationV1Request\x12(\n\x0blocation_id\x18\x01 \x01(\x04\x42\x07\xfa\x42\x04\x32\x02 \x00R\nlocationId\"^\n\x1a\x44\x65scribeLocationV1Response\x12@\n\x08location\x18\x01 \x01(\x0b\x32$.ozonmp.lgc_location_api.v1.LocationR\x08location\"\x18\n\x16ListLocationsV1Request\"]\n\x17ListLocationsV1Response\x12\x42\n\tlocations\x18\x01 \x03(\x0b\x32$.ozonmp.lgc_location_api.v1.LocationR\tlocations\"C\n\x17RemoveLocationV1Request\x12(\n\x0blocation_id\x18\x01 \x01(\x04\x42\x07\xfa\x42\x04\x32\x02 \x00R\nlocationId\"0\n\x18RemoveLocationV1Response\x12\x14\n\x05\x66ound\x18\x01 \x01(\x08R\x05\x66ound2\xa5\x05\n\x15LgcLocationApiService\x12\x9b\x01\n\x10\x43reateLocationV1\x12\x33.ozonmp.lgc_location_api.v1.CreateLocationV1Request\x1a\x34.ozonmp.lgc_location_api.v1.CreateLocationV1Response\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/api/v1/locations:\x01*\x12\xac\x01\n\x12\x44\x65scribeLocationV1\x12\x35.ozonmp.lgc_location_api.v1.DescribeLocationV1Request\x1a\x36.ozonmp.lgc_location_api.v1.DescribeLocationV1Response\"\'\x82\xd3\xe4\x93\x02!\x12\x1f/api/v1/locations/{location_id}\x12\x95\x01\n\x0fListLocationsV1\x12\x32.ozonmp.lgc_location_api.v1.ListLocationsV1Request\x1a\x33.ozonmp.lgc_location_api.v1.ListLocationsV1Response\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/api/v1/locations\x12\xa6\x01\n\x10RemoveLocationV1\x12\x33.ozonmp.lgc_location_api.v1.RemoveLocationV1Request\x1a\x34.ozonmp.lgc_location_api.v1.RemoveLocationV1Response\"\'\x82\xd3\xe4\x93\x02!*\x1f/api/v1/locations/{location_id}BJZHgithub.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_apib\x06proto3'
   ,
-  dependencies=[validate_dot_validate__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
+  dependencies=[validate_dot_validate__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,])
 
 
 
@@ -77,8 +76,8 @@ _LOCATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=169,
-  serialized_end=275,
+  serialized_start=136,
+  serialized_end=242,
 )
 
 
@@ -123,8 +122,8 @@ _CREATELOCATIONV1REQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=278,
-  serialized_end=442,
+  serialized_start=245,
+  serialized_end=409,
 )
 
 
@@ -155,8 +154,8 @@ _CREATELOCATIONV1RESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=444,
-  serialized_end=503,
+  serialized_start=411,
+  serialized_end=470,
 )
 
 
@@ -187,8 +186,8 @@ _DESCRIBELOCATIONV1REQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=505,
-  serialized_end=574,
+  serialized_start=472,
+  serialized_end=541,
 )
 
 
@@ -219,8 +218,8 @@ _DESCRIBELOCATIONV1RESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=576,
-  serialized_end=670,
+  serialized_start=543,
+  serialized_end=637,
 )
 
 
@@ -244,8 +243,8 @@ _LISTLOCATIONSV1REQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=672,
-  serialized_end=696,
+  serialized_start=639,
+  serialized_end=663,
 )
 
 
@@ -276,8 +275,8 @@ _LISTLOCATIONSV1RESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=698,
-  serialized_end=791,
+  serialized_start=665,
+  serialized_end=758,
 )
 
 
@@ -308,8 +307,8 @@ _REMOVELOCATIONV1REQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=793,
-  serialized_end=860,
+  serialized_start=760,
+  serialized_end=827,
 )
 
 
@@ -340,8 +339,8 @@ _REMOVELOCATIONV1RESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=862,
-  serialized_end=910,
+  serialized_start=829,
+  serialized_end=877,
 )
 
 _DESCRIBELOCATIONV1RESPONSE.fields_by_name['location'].message_type = _LOCATION
@@ -435,8 +434,8 @@ _LGCLOCATIONAPISERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=913,
-  serialized_end=1583,
+  serialized_start=880,
+  serialized_end=1557,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateLocationV1',
@@ -445,7 +444,7 @@ _LGCLOCATIONAPISERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CREATELOCATIONV1REQUEST,
     output_type=_CREATELOCATIONV1RESPONSE,
-    serialized_options=b'\202\323\344\223\002\031\"\024/v1/locations/create:\001*',
+    serialized_options=b'\202\323\344\223\002\026\"\021/api/v1/locations:\001*',
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
@@ -455,7 +454,7 @@ _LGCLOCATIONAPISERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_DESCRIBELOCATIONV1REQUEST,
     output_type=_DESCRIBELOCATIONV1RESPONSE,
-    serialized_options=b'\202\323\344\223\002\033\"\026/v1/locations/describe:\001*',
+    serialized_options=b'\202\323\344\223\002!\022\037/api/v1/locations/{location_id}',
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
@@ -465,7 +464,7 @@ _LGCLOCATIONAPISERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_LISTLOCATIONSV1REQUEST,
     output_type=_LISTLOCATIONSV1RESPONSE,
-    serialized_options=b'\202\323\344\223\002\027\"\022/v1/locations/list:\001*',
+    serialized_options=b'\202\323\344\223\002\023\022\021/api/v1/locations',
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
@@ -475,7 +474,7 @@ _LGCLOCATIONAPISERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_REMOVELOCATIONV1REQUEST,
     output_type=_REMOVELOCATIONV1RESPONSE,
-    serialized_options=b'\202\323\344\223\002\031\"\024/v1/locations/remove:\001*',
+    serialized_options=b'\202\323\344\223\002!*\037/api/v1/locations/{location_id}',
     create_key=_descriptor._internal_create_key,
   ),
 ])
