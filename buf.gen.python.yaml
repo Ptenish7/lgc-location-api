@@ -1,26 +1,22 @@
 version: v1
 plugins:
-  - name: go
-    out: pkg/lgc-location-api
-    opt:
-      - paths=import
+  - name: python
+    out: pypkg/omp-template-api
     strategy: directory
 
-  - name: go-grpc
-    out: pkg/lgc-location-api
-    opt:
-      - paths=import
+  - name: grpclib_python
+    out: pypkg/omp-template-api
     strategy: directory
 
   - name: grpc-gateway
-    out: pkg/lgc-location-api
+    out: pkg/omp-template-api
     opt:
       - logtostderr=true
       - paths=import
     strategy: directory
 
   - name: validate
-    out: pkg/lgc-location-api
+    out: pkg/omp-template-api
     opt:
       - lang=go
     strategy: directory
