@@ -16,7 +16,28 @@
     "application/json"
   ],
   "paths": {
-    "/v1/locations/create": {
+    "/api/v1/locations": {
+      "get": {
+        "summary": "ListLocationsV1 - List locations",
+        "operationId": "LgcLocationApiService_ListLocationsV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListLocationsV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "LgcLocationApiService"
+        ]
+      },
       "post": {
         "summary": "CreateLocationV1 - Create a location",
         "operationId": "LgcLocationApiService_CreateLocationV1",
@@ -49,8 +70,8 @@
         ]
       }
     },
-    "/v1/locations/describe": {
-      "post": {
+    "/api/v1/locations/{locationId}": {
+      "get": {
         "summary": "DescribeLocationV1 - Describe a location",
         "operationId": "LgcLocationApiService_DescribeLocationV1",
         "responses": {
@@ -69,54 +90,18 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "locationId",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1DescribeLocationV1Request"
-            }
+            "type": "string",
+            "format": "uint64"
           }
         ],
         "tags": [
           "LgcLocationApiService"
         ]
-      }
-    },
-    "/v1/locations/list": {
-      "post": {
-        "summary": "ListLocationsV1 - List locations",
-        "operationId": "LgcLocationApiService_ListLocationsV1",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListLocationsV1Response"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ListLocationsV1Request"
-            }
-          }
-        ],
-        "tags": [
-          "LgcLocationApiService"
-        ]
-      }
-    },
-    "/v1/locations/remove": {
-      "post": {
+      },
+      "delete": {
         "summary": "RemoveLocationV1 - Remove a location",
         "operationId": "LgcLocationApiService_RemoveLocationV1",
         "responses": {
@@ -135,12 +120,11 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "locationId",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1RemoveLocationV1Request"
-            }
+            "type": "string",
+            "format": "uint64"
           }
         ],
         "tags": [
@@ -225,15 +209,6 @@
         }
       }
     },
-    "v1DescribeLocationV1Request": {
-      "type": "object",
-      "properties": {
-        "locationId": {
-          "type": "string",
-          "format": "uint64"
-        }
-      }
-    },
     "v1DescribeLocationV1Response": {
       "type": "object",
       "properties": {
@@ -241,9 +216,6 @@
           "$ref": "#/definitions/lgc_location_apiv1Location"
         }
       }
-    },
-    "v1ListLocationsV1Request": {
-      "type": "object"
     },
     "v1ListLocationsV1Response": {
       "type": "object",
@@ -253,15 +225,6 @@
           "items": {
             "$ref": "#/definitions/lgc_location_apiv1Location"
           }
-        }
-      }
-    },
-    "v1RemoveLocationV1Request": {
-      "type": "object",
-      "properties": {
-        "locationId": {
-          "type": "string",
-          "format": "uint64"
         }
       }
     },

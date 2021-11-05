@@ -1,15 +1,11 @@
 version: v1
 plugins:
-  - name: go
-    out: pkg/lgc-location-api
-    opt:
-      - paths=import
+  - name: python
+    out: pypkg/lgc-location-api
     strategy: directory
 
-  - name: go-grpc
-    out: pkg/lgc-location-api
-    opt:
-      - paths=import
+  - name: grpclib_python
+    out: pypkg/lgc-location-api
     strategy: directory
 
   - name: grpc-gateway
