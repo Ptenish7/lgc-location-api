@@ -10,6 +10,7 @@ import (
 	"github.com/ozonmp/lgc-location-api/internal/model"
 )
 
+// Consumer interface
 type Consumer interface {
 	Start(ctx context.Context)
 	Close()
@@ -35,6 +36,7 @@ type consumer struct {
 //	timeout   time.Duration
 //}
 
+// NewDbConsumer creates a new db consumer
 func NewDbConsumer(
 	n uint64,
 	batchSize uint64,

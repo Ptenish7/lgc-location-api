@@ -1,6 +1,6 @@
 package model
 
-// Location
+// Location structure
 type Location struct {
 	ID        uint64
 	Latitude  float64
@@ -8,10 +8,10 @@ type Location struct {
 	Title     string
 }
 
-// EventType
+// EventType type alias
 type EventType uint8
 
-// EventStatus
+// EventStatus type alias
 type EventStatus uint8
 
 // EventType and EventStatus constants
@@ -24,7 +24,7 @@ const (
 	Processed
 )
 
-// LocationEvent
+// LocationEvent structure
 type LocationEvent struct {
 	ID     uint64
 	Type   EventType

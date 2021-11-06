@@ -32,6 +32,7 @@ type producer struct {
 	wg *sync.WaitGroup
 }
 
+// NewKafkaProducer creates new kafka producer
 func NewKafkaProducer(
 	n uint64,
 	batchSize uint64,
