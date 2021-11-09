@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -87,7 +86,7 @@ func (r *repo) RemoveLocation(ctx context.Context, locationID uint64) (bool, err
 	query := psql.
 		Update("locations").
 		Set("removed", true).
-		Set("updated_at", time.Now()).
+		Set("updated_at", "now()").
 		Where(sq.Eq{"id": locationID, "removed": false}).
 		RunWith(r.db)
 
