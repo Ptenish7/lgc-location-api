@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"github.com/ozonmp/lgc-location-api/internal/model"
 	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"
 )
 
@@ -24,6 +25,17 @@ func (l *locationAPI) RemoveLocationV1(
 	if err != nil {
 		log.Error().Err(err).Msg("RemoveLocationV1 failed")
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	event := &model.LocationEvent{
+		LocationID: req.LocationId,
+		Type:       model.Removed,
+		Entity:     nil,
+	}
+
+	err = l.eventRepo.Add(ctx, event)
+	if err != nil {
+		log.Debug().Msg("failed to add location removal event")
 	}
 
 	log.Debug().Msg("RemoveLocationV1 succeeded")

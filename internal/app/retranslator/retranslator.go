@@ -31,7 +31,7 @@ type Config struct {
 	WorkerCount   int
 	BatchSize     uint64
 
-	Repo   repo.EventRepo
+	Repo   eventrepo.EventRepo
 	Sender sender.EventSender
 }
 

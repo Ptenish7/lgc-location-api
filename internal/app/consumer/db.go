@@ -20,7 +20,7 @@ type consumer struct {
 	n      uint64
 	events chan<- model.LocationEvent
 
-	repo repo.EventRepo
+	repo eventrepo.EventRepo
 
 	batchSize uint64
 	timeout   time.Duration
@@ -41,7 +41,7 @@ func NewDbConsumer(
 	n uint64,
 	batchSize uint64,
 	consumeTimeout time.Duration,
-	repo repo.EventRepo,
+	repo eventrepo.EventRepo,
 	events chan<- model.LocationEvent,
 ) Consumer {
 	wg := &sync.WaitGroup{}
@@ -77,7 +77,7 @@ func (c *consumer) consume(ctx context.Context) {
 	for {
 		select {
 		case <-ticker.C:
-			events, err := c.repo.Lock(c.batchSize)
+			events, err := c.repo.Lock(ctx, c.batchSize)
 			if err != nil {
 				log.Printf("failed to lock events: %v", err)
 				continue

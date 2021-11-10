@@ -16,7 +16,7 @@ func TestStart(t *testing.T) {
 	repo := mocks.NewMockEventRepo(ctrl)
 	sender := mocks.NewMockEventSender(ctrl)
 
-	repo.EXPECT().Lock(gomock.Any()).AnyTimes()
+	repo.EXPECT().Lock(gomock.Any(), gomock.Any()).AnyTimes()
 
 	cfg := Config{
 		ChannelSize:     512,
@@ -54,8 +54,8 @@ func TestLockRemove(t *testing.T) {
 		},
 	}
 
-	lockAll := repo.EXPECT().Lock(uint64(2)).Return(events, nil).Times(1)
-	repo.EXPECT().Lock(gomock.Any()).Return(nil, errors.New("no events to lock")).AnyTimes().After(lockAll)
+	lockAll := repo.EXPECT().Lock(gomock.Any(), uint64(2)).Return(events, nil).Times(1)
+	repo.EXPECT().Lock(gomock.Any(), gomock.Any()).Return(nil, errors.New("no events to lock")).AnyTimes().After(lockAll)
 
 	sentIDs := make([]uint64, 0)
 	sender.EXPECT().Send(gomock.Any()).Times(2).DoAndReturn(func(event *model.LocationEvent) error {
@@ -64,7 +64,7 @@ func TestLockRemove(t *testing.T) {
 	})
 
 	removedIDs := make([]uint64, 0)
-	repo.EXPECT().Remove(gomock.Any()).Times(2).DoAndReturn(func(eventIDs []uint64) error {
+	repo.EXPECT().Remove(gomock.Any(), gomock.Any()).Times(2).DoAndReturn(func(eventIDs []uint64) error {
 		removedIDs = append(removedIDs, eventIDs...)
 		return nil
 	})
@@ -110,8 +110,8 @@ func TestLockUnlock(t *testing.T) {
 		},
 	}
 
-	lockAll := repo.EXPECT().Lock(uint64(2)).Return(events, nil).Times(1)
-	repo.EXPECT().Lock(gomock.Any()).Return(nil, errors.New("no events to lock")).AnyTimes().After(lockAll)
+	lockAll := repo.EXPECT().Lock(gomock.Any(), uint64(2)).Return(events, nil).Times(1)
+	repo.EXPECT().Lock(gomock.Any(), gomock.Any()).Return(nil, errors.New("no events to lock")).AnyTimes().After(lockAll)
 
 	notSentIDs := make([]uint64, 0)
 	sender.EXPECT().Send(gomock.Any()).Times(2).DoAndReturn(func(event *model.LocationEvent) error {
@@ -120,7 +120,7 @@ func TestLockUnlock(t *testing.T) {
 	})
 
 	unlockedIDs := make([]uint64, 0)
-	repo.EXPECT().Unlock(gomock.Any()).Times(2).DoAndReturn(func(eventIDs []uint64) error {
+	repo.EXPECT().Unlock(gomock.Any(), gomock.Any()).Times(2).DoAndReturn(func(eventIDs []uint64) error {
 		unlockedIDs = append(unlockedIDs, eventIDs...)
 		return nil
 	})
