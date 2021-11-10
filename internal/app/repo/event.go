@@ -53,7 +53,7 @@ func (r *eventRepo) Lock(ctx context.Context, n uint64) ([]model.LocationEvent, 
 	}
 
 	var result []model.LocationEvent
-	err = r.db.SelectContext(ctx, result, s, args)
+	err = r.db.SelectContext(ctx, &result, s, args...)
 
 	return result, err
 }
@@ -86,27 +86,31 @@ func (r *eventRepo) Unlock(ctx context.Context, eventIDs []uint64) error {
 
 // Add adds new event
 func (r *eventRepo) Add(ctx context.Context, event *model.LocationEvent) error {
-	payloadPb := &pb.Location{
-		Id:        event.Entity.ID,
-		Latitude:  event.Entity.Latitude,
-		Longitude: event.Entity.Longitude,
-		Title:     event.Entity.Title,
-	}
+	payload := []byte("{}")
+	if event.Entity != nil {
+		payloadPb := &pb.Location{
+			Id:        event.Entity.ID,
+			Latitude:  event.Entity.Latitude,
+			Longitude: event.Entity.Longitude,
+			Title:     event.Entity.Title,
+		}
 
-	payload, err := protojson.Marshal(payloadPb)
-	if err != nil {
-		return err
+		var err error
+		payload, err = protojson.Marshal(payloadPb)
+		if err != nil {
+			return err
+		}
 	}
 
 	query := psql.
 		Insert("locations_events").
 		Columns("location_id", "type", "status", "payload").
-		Values(event.Entity.ID, event.Type, event.Status, payload).
+		Values(event.LocationID, event.Type, event.Status, payload).
 		RunWith(r.db)
 
-	_, err = query.ExecContext(ctx)
+	_, err := query.ExecContext(ctx)
 
-	return nil
+	return err
 }
 
 // Remove removes specified events

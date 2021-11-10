@@ -30,6 +30,7 @@ func (l *locationAPI) RemoveLocationV1(
 	event := &model.LocationEvent{
 		LocationID: req.LocationId,
 		Type:       model.Removed,
+		Status:     model.Deferred,
 		Entity:     nil,
 	}
 

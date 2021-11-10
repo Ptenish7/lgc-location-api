@@ -25,6 +25,7 @@ import (
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 
 	"github.com/ozonmp/lgc-location-api/internal/api"
+	eventrepo "github.com/ozonmp/lgc-location-api/internal/app/repo"
 	"github.com/ozonmp/lgc-location-api/internal/config"
 	"github.com/ozonmp/lgc-location-api/internal/repo"
 	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"
@@ -108,8 +109,9 @@ func (s *GrpcServer) Start(cfg *config.Config) error {
 	)
 
 	r := repo.NewRepo(s.db, s.batchSize)
+	er := eventrepo.NewEventRepo(s.db)
 
-	pb.RegisterLgcLocationApiServiceServer(grpcServer, api.NewLocationAPI(r))
+	pb.RegisterLgcLocationApiServiceServer(grpcServer, api.NewLocationAPI(r, er))
 	grpc_prometheus.EnableHandlingTimeHistogram()
 	grpc_prometheus.Register(grpcServer)
 

@@ -30,6 +30,7 @@ func (l *locationAPI) CreateLocationV1(
 	event := &model.LocationEvent{
 		LocationID: locationID,
 		Type:       model.Created,
+		Status:     model.Deferred,
 		Entity:     &model.Location{Latitude: req.Latitude, Longitude: req.Longitude, Title: req.Title},
 	}
 

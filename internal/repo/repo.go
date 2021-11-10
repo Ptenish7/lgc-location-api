@@ -55,10 +55,10 @@ func (r *repo) DescribeLocation(ctx context.Context, locationID uint64) (*model.
 		return nil, err
 	}
 
-	var result *model.Location
-	err = r.db.GetContext(ctx, result, s, args)
+	var result model.Location
+	err = r.db.GetContext(ctx, &result, s, args...)
 
-	return result, err
+	return &result, err
 }
 
 // ListLocations returns all locations
@@ -67,6 +67,7 @@ func (r *repo) ListLocations(ctx context.Context, limit uint64, cursor uint64) (
 		Select("*").
 		From("locations").
 		Where(sq.Eq{"removed": false}).
+		OrderBy("id").
 		Limit(limit).
 		Offset(cursor)
 
@@ -76,7 +77,7 @@ func (r *repo) ListLocations(ctx context.Context, limit uint64, cursor uint64) (
 	}
 
 	var result []*model.Location
-	err = r.db.SelectContext(ctx, result, s, args)
+	err = r.db.SelectContext(ctx, &result, s, args...)
 
 	return result, err
 }
