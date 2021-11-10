@@ -20,7 +20,7 @@ func (l *locationAPI) ListLocationsV1(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	locations, err := l.repo.ListLocations(ctx)
+	locations, err := l.repo.ListLocations(ctx, 100, 0)
 	if err != nil {
 		log.Error().Err(err).Msg("ListLocationsV1 failed")
 		return nil, status.Error(codes.Internal, err.Error())
