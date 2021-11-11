@@ -40,7 +40,7 @@ func TestProducer(t *testing.T) {
 
 		gomock.InOrder(
 			sender.EXPECT().Send(gomock.Any()).Return(errors.New("failed to send event")).Times(1),
-			repo.EXPECT().Unlock(gomock.Any()).Times(1),
+			repo.EXPECT().Unlock(gomock.Any(), gomock.Any()).Times(1),
 		)
 	})
 
@@ -49,7 +49,7 @@ func TestProducer(t *testing.T) {
 
 		gomock.InOrder(
 			sender.EXPECT().Send(gomock.Any()).Return(nil).Times(1),
-			repo.EXPECT().Remove(gomock.Any()).Times(1),
+			repo.EXPECT().Remove(gomock.Any(), gomock.Any()).Times(1),
 		)
 	})
 

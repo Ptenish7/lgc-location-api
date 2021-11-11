@@ -4,6 +4,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
+	"github.com/ozonmp/lgc-location-api/internal/app/repo"
 	"github.com/ozonmp/lgc-location-api/internal/model"
 	"github.com/ozonmp/lgc-location-api/internal/repo"
 
@@ -19,12 +20,13 @@ var (
 
 type locationAPI struct {
 	pb.UnimplementedLgcLocationApiServiceServer
-	repo repo.Repo
+	repo      repo.Repo
+	eventRepo eventrepo.EventRepo
 }
 
 // NewLocationAPI returns api of lgc-location-api service
-func NewLocationAPI(r repo.Repo) pb.LgcLocationApiServiceServer {
-	return &locationAPI{repo: r}
+func NewLocationAPI(r repo.Repo, er eventrepo.EventRepo) pb.LgcLocationApiServiceServer {
+	return &locationAPI{repo: r, eventRepo: er}
 }
 
 func locationToProtobuf(l *model.Location) *pb.Location {

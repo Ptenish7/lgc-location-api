@@ -23,7 +23,7 @@ type producer struct {
 	//timeout   time.Duration
 	batchSize uint64
 
-	repo   repo.EventRepo
+	repo   eventrepo.EventRepo
 	sender sender.EventSender
 	events <-chan model.LocationEvent
 
@@ -36,7 +36,7 @@ type producer struct {
 func NewKafkaProducer(
 	n uint64,
 	batchSize uint64,
-	repo repo.EventRepo,
+	repo eventrepo.EventRepo,
 	sender sender.EventSender,
 	events <-chan model.LocationEvent,
 	workerPool *workerpool.WorkerPool,
@@ -80,13 +80,13 @@ func (p *producer) produce(ctx context.Context) {
 					log.Printf("failed to send event: %v", err)
 					updateBatch = append(updateBatch, event.ID)
 					if len(updateBatch) == int(p.batchSize) {
-						p.update(updateBatch)
+						p.update(ctx, updateBatch)
 						updateBatch = updateBatch[:0]
 					}
 				} else {
 					cleanBatch = append(cleanBatch, event.ID)
 					if len(cleanBatch) == int(p.batchSize) {
-						p.clean(cleanBatch)
+						p.clean(ctx, cleanBatch)
 						cleanBatch = cleanBatch[:0]
 					}
 				}
@@ -94,27 +94,27 @@ func (p *producer) produce(ctx context.Context) {
 
 		case <-ctx.Done():
 			if len(updateBatch) > 0 {
-				p.update(updateBatch)
+				p.update(ctx, updateBatch)
 			}
 			if len(cleanBatch) > 0 {
-				p.clean(cleanBatch)
+				p.clean(ctx, cleanBatch)
 			}
 			return
 		}
 	}
 }
 
-func (p *producer) update(eventIDs []uint64) {
+func (p *producer) update(ctx context.Context, eventIDs []uint64) {
 	p.workerPool.Submit(func() {
-		if err := p.repo.Unlock(eventIDs); err != nil {
+		if err := p.repo.Unlock(ctx, eventIDs); err != nil {
 			log.Printf("failed to unlock events: %v", err)
 		}
 	})
 }
 
-func (p *producer) clean(eventIDs []uint64) {
+func (p *producer) clean(ctx context.Context, eventIDs []uint64) {
 	p.workerPool.Submit(func() {
-		if err := p.repo.Remove(eventIDs); err != nil {
+		if err := p.repo.Remove(ctx, eventIDs); err != nil {
 			log.Printf("failed to remove events: %v", err)
 		}
 	})

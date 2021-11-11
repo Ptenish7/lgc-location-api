@@ -1,8 +1,7 @@
 # Builder
 
-ARG GITHUB_PATH=github.com/ozonmp/lgc-location-api
-
 FROM golang:1.16-alpine AS builder
+ARG GITHUB_PATH=github.com/ozonmp/lgc-location-api
 RUN apk add --update make git protoc protobuf protobuf-dev curl
 COPY . /home/${GITHUB_PATH}
 WORKDIR /home/${GITHUB_PATH}
@@ -11,7 +10,8 @@ RUN make deps-go && make build-go
 # gRPC Server
 
 FROM alpine:latest as server
-LABEL org.opencontainers.image.source https://${GITHUB_PATH}
+ARG GITHUB_PATH=github.com/ozonmp/lgc-location-api
+LABEL org.opencontainers.image.source=https://${GITHUB_PATH}
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 

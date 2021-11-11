@@ -16,7 +16,7 @@ func TestStart(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	repo := mocks.NewMockEventRepo(ctrl)
 
-	repo.EXPECT().Lock(gomock.Any()).AnyTimes()
+	repo.EXPECT().Lock(gomock.Any(), gomock.Any()).AnyTimes()
 
 	eventsChan := make(chan model.LocationEvent, 32)
 
@@ -42,8 +42,8 @@ func TestLockAndWriteToChan(t *testing.T) {
 	repo := mocks.NewMockEventRepo(ctrl)
 
 	gomock.InOrder(
-		repo.EXPECT().Lock(gomock.Any()).Return(events, nil).Times(1),
-		repo.EXPECT().Lock(gomock.Any()).Return(nil, errors.New("failed to lock events")).AnyTimes(),
+		repo.EXPECT().Lock(gomock.Any(), gomock.Any()).Return(events, nil).Times(1),
+		repo.EXPECT().Lock(gomock.Any(), gomock.Any()).Return(nil, errors.New("failed to lock events")).AnyTimes(),
 	)
 
 	eventsChan := make(chan model.LocationEvent, 32)

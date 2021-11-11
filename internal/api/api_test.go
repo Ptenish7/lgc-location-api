@@ -37,8 +37,9 @@ func (s *LocationAPITestSuite) SetupSuite() {
 
 	ctrl := gomock.NewController(s.T())
 	repo := mocks.NewMockRepo(ctrl)
+	eventRepo := mocks.NewMockEventRepo(ctrl)
 
-	pb.RegisterLgcLocationApiServiceServer(s.server, NewLocationAPI(repo))
+	pb.RegisterLgcLocationApiServiceServer(s.server, NewLocationAPI(repo, eventRepo))
 	go func() {
 		if err := s.server.Serve(s.listener); err != nil {
 			log.Fatalf("s.server exited with error: %v", err)

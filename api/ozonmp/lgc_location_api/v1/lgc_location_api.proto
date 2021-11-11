@@ -61,7 +61,10 @@ message DescribeLocationV1Response {
   Location location = 1;
 }
 
-message ListLocationsV1Request {}
+message ListLocationsV1Request {
+  uint64 limit = 1 [(validate.rules).uint64.gt = 0];
+  uint64 offset = 2 [(validate.rules).uint64.gte = 0];
+}
 
 message ListLocationsV1Response {
   repeated Location locations = 1;

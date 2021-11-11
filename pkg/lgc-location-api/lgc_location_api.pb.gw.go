@@ -117,9 +117,20 @@ func local_request_LgcLocationApiService_DescribeLocationV1_0(ctx context.Contex
 
 }
 
+var (
+	filter_LgcLocationApiService_ListLocationsV1_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
 func request_LgcLocationApiService_ListLocationsV1_0(ctx context.Context, marshaler runtime.Marshaler, client LgcLocationApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ListLocationsV1Request
 	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_LgcLocationApiService_ListLocationsV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
 
 	msg, err := client.ListLocationsV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -129,6 +140,13 @@ func request_LgcLocationApiService_ListLocationsV1_0(ctx context.Context, marsha
 func local_request_LgcLocationApiService_ListLocationsV1_0(ctx context.Context, marshaler runtime.Marshaler, server LgcLocationApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ListLocationsV1Request
 	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_LgcLocationApiService_ListLocationsV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
 
 	msg, err := server.ListLocationsV1(ctx, &protoReq)
 	return msg, metadata, err

@@ -66,18 +66,18 @@ func (mr *MockRepoMockRecorder) DescribeLocation(arg0, arg1 interface{}) *gomock
 }
 
 // ListLocations mocks base method.
-func (m *MockRepo) ListLocations(arg0 context.Context) ([]*model.Location, error) {
+func (m *MockRepo) ListLocations(arg0 context.Context, arg1, arg2 uint64) ([]*model.Location, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListLocations", arg0)
+	ret := m.ctrl.Call(m, "ListLocations", arg0, arg1, arg2)
 	ret0, _ := ret[0].([]*model.Location)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ListLocations indicates an expected call of ListLocations.
-func (mr *MockRepoMockRecorder) ListLocations(arg0 interface{}) *gomock.Call {
+func (mr *MockRepoMockRecorder) ListLocations(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListLocations", reflect.TypeOf((*MockRepo)(nil).ListLocations), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListLocations", reflect.TypeOf((*MockRepo)(nil).ListLocations), arg0, arg1, arg2)
 }
 
 // RemoveLocation mocks base method.
