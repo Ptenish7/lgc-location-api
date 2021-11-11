@@ -27,6 +27,7 @@ create table locations_events
     id          bigserial primary key,
     location_id bigint                not null references locations (id),
     type        location_event_type   not null,
+    type_extra  smallint              not null default 0,
     status      location_event_status not null default 'Deferred',
     payload     jsonb                 not null,
     updated_at  timestamptz           not null default now()

@@ -60,8 +60,8 @@ func (s *EventRepoTestSuite) TestUnlock() {
 
 func (s *EventRepoTestSuite) TestAdd() {
 	s.mock.
-		ExpectExec(regexp.QuoteMeta(`INSERT INTO locations_events (location_id,type,status,payload) VALUES ($1,$2,$3,$4)`)).
-		WithArgs(1, "Removed", "Deferred", []byte("{}")).
+		ExpectExec(regexp.QuoteMeta(`INSERT INTO locations_events (location_id,type,type_extra,status,payload) VALUES ($1,$2,$3,$4,$5)`)).
+		WithArgs(1, "Removed", 0, "Deferred", []byte("{}")).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	err := s.r.Add(context.Background(), &model.LocationEvent{LocationID: 1, Type: model.Removed, Status: model.Deferred, Entity: nil})
