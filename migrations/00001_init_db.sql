@@ -9,7 +9,13 @@ create table locations
     removed    boolean          not null default false,
     created_at timestamptz      not null default now(),
     updated_at timestamptz      not null default now()
-);
+) partition by hash (id);
+
+create table locations_0 partition of locations for values with (modulus 5, remainder 0);
+create table locations_1 partition of locations for values with (modulus 5, remainder 1);
+create table locations_2 partition of locations for values with (modulus 5, remainder 2);
+create table locations_3 partition of locations for values with (modulus 5, remainder 3);
+create table locations_4 partition of locations for values with (modulus 5, remainder 4);
 
 create index locations_removed_index on locations (removed);
 
@@ -24,7 +30,11 @@ create table locations_events
     status      location_event_status not null default 'Deferred',
     payload     jsonb                 not null,
     updated_at  timestamptz           not null default now()
-);
+) partition by hash (location_id);
+
+create table locations_events_0 partition of locations_events for values with (modulus 3, remainder 0);
+create table locations_events_1 partition of locations_events for values with (modulus 3, remainder 1);
+create table locations_events_2 partition of locations_events for values with (modulus 3, remainder 2);
 
 create index locations_events_status_index on locations_events (status);
 
