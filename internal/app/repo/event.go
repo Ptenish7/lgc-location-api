@@ -89,10 +89,23 @@ func (r *eventRepo) Add(ctx context.Context, event *model.LocationEvent) error {
 	payload := []byte("{}")
 	if event.Entity != nil {
 		payloadPb := &pb.Location{
-			Id:        event.Entity.ID,
-			Latitude:  event.Entity.Latitude,
-			Longitude: event.Entity.Longitude,
-			Title:     event.Entity.Title,
+			Id: event.LocationID,
+		}
+
+		if event.Type == model.Created {
+			payloadPb.Latitude = event.Entity.Latitude
+			payloadPb.Longitude = event.Entity.Longitude
+			payloadPb.Title = event.Entity.Title
+		} else if event.Type == model.Updated {
+			if event.TypeExtra.HasLatitude() {
+				payloadPb.Latitude = event.Entity.Latitude
+			}
+			if event.TypeExtra.HasLongitude() {
+				payloadPb.Longitude = event.Entity.Longitude
+			}
+			if event.TypeExtra.HasTitle() {
+				payloadPb.Title = event.Entity.Title
+			}
 		}
 
 		var err error
@@ -104,8 +117,8 @@ func (r *eventRepo) Add(ctx context.Context, event *model.LocationEvent) error {
 
 	query := psql.
 		Insert("locations_events").
-		Columns("location_id", "type", "status", "payload").
-		Values(event.LocationID, event.Type, event.Status, payload).
+		Columns("location_id", "type", "type_extra", "status", "payload").
+		Values(event.LocationID, event.Type, event.TypeExtra, event.Status, payload).
 		RunWith(r.db)
 
 	_, err := query.ExecContext(ctx)

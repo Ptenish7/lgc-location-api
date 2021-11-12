@@ -40,6 +40,39 @@ func (t *EventType) Scan(src interface{}) error {
 	return fmt.Errorf("EventType name not found: %s", src)
 }
 
+// EventTypeExtra type alias
+type EventTypeExtra uint16
+
+// WithLatitude adds latitude bits
+func (e EventTypeExtra) WithLatitude() EventTypeExtra {
+	return e | EventTypeExtra(1)
+}
+
+// WithLongitude adds longitude bits
+func (e EventTypeExtra) WithLongitude() EventTypeExtra {
+	return e | EventTypeExtra(2)
+}
+
+// WithTitle adds title bits
+func (e EventTypeExtra) WithTitle() EventTypeExtra {
+	return e | EventTypeExtra(4)
+}
+
+// HasLatitude returns true if latitude bit is set to 1
+func (e EventTypeExtra) HasLatitude() bool {
+	return (e & EventTypeExtra(1)) == 1
+}
+
+// HasLongitude returns true if longitude bit is set to 1
+func (e EventTypeExtra) HasLongitude() bool {
+	return (e & EventTypeExtra(2)) == 2
+}
+
+// HasTitle returns true if title bit is set to 1
+func (e EventTypeExtra) HasTitle() bool {
+	return (e & EventTypeExtra(4)) == 4
+}
+
 // Value converts EventType to DB enum value
 func (t EventType) Value() (driver.Value, error) {
 	return eventTypeNames[t-1], nil
@@ -74,10 +107,11 @@ func (s EventStatus) Value() (driver.Value, error) {
 
 // LocationEvent structure
 type LocationEvent struct {
-	ID         uint64      `db:"id"`
-	LocationID uint64      `db:"location_id"`
-	Type       EventType   `db:"type"`
-	Status     EventStatus `db:"status"`
-	Entity     *Location   `db:"payload"`
-	UpdatedAt  time.Time   `db:"updated_at"`
+	ID         uint64         `db:"id"`
+	LocationID uint64         `db:"location_id"`
+	Type       EventType      `db:"type"`
+	TypeExtra  EventTypeExtra `db:"type_extra"`
+	Status     EventStatus    `db:"status"`
+	Entity     *Location      `db:"payload"`
+	UpdatedAt  time.Time      `db:"updated_at"`
 }
