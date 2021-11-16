@@ -11,9 +11,9 @@ import (
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
-	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 
+	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
 	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"
 )
 
@@ -24,7 +24,7 @@ var (
 	})
 )
 
-func createGatewayServer(grpcAddr, gatewayAddr string) *http.Server {
+func createGatewayServer(ctx context.Context, grpcAddr, gatewayAddr string) *http.Server {
 	// Create a client connection to the gRPC Server we just started.
 	// This is where the gRPC-Gateway proxies the requests.
 	conn, err := grpc.DialContext(
@@ -38,12 +38,12 @@ func createGatewayServer(grpcAddr, gatewayAddr string) *http.Server {
 		grpc.WithInsecure(),
 	)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to dial server")
+		logger.ErrorKV(ctx, "failed to dial server", "err", err)
 	}
 
 	mux := runtime.NewServeMux()
 	if err := pb.RegisterLgcLocationApiServiceHandler(context.Background(), mux, conn); err != nil {
-		log.Fatal().Err(err).Msg("Failed registration handler")
+		logger.FatalKV(ctx, "failed to register handler", "err", err)
 	}
 
 	gatewayServer := &http.Server{

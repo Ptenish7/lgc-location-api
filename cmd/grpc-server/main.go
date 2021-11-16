@@ -1,12 +1,15 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
+	"os"
 
 	"github.com/pressly/goose/v3"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+	gelf "github.com/snovichkov/zap-gelf"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 
 	_ "github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib"
@@ -14,6 +17,7 @@ import (
 
 	"github.com/ozonmp/lgc-location-api/internal/config"
 	"github.com/ozonmp/lgc-location-api/internal/database"
+	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
 	"github.com/ozonmp/lgc-location-api/internal/server"
 	"github.com/ozonmp/lgc-location-api/internal/tracer"
 )
@@ -23,25 +27,26 @@ var (
 )
 
 func main() {
+	ctx := context.Background()
+
 	if err := config.ReadConfigYML("config.yml"); err != nil {
-		log.Fatal().Err(err).Msg("Failed init configuration")
+		logger.FatalKV(ctx, "failed to init configuration", "err", err)
 	}
 	cfg := config.GetConfigInstance()
 
 	migration := flag.Bool("migration", true, "Defines the migration start option")
 	flag.Parse()
 
-	log.Info().
-		Str("version", cfg.Project.Version).
-		Str("commitHash", cfg.Project.CommitHash).
-		Bool("debug", cfg.Project.Debug).
-		Str("environment", cfg.Project.Environment).
-		Msgf("Starting service: %s", cfg.Project.Name)
+	syncLogger := initLogger(ctx, cfg)
+	defer syncLogger()
 
-	// default: zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	if cfg.Project.Debug {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-	}
+	logger.InfoKV(
+		ctx, fmt.Sprintf("starting service: %s", cfg.Project.Name),
+		"version", cfg.Project.Version,
+		"commitHash", cfg.Project.CommitHash,
+		"debug", cfg.Project.Debug,
+		"environment", cfg.Project.Environment,
+	)
 
 	dsn := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=%v",
 		cfg.Database.Host,
@@ -52,31 +57,71 @@ func main() {
 		cfg.Database.SslMode,
 	)
 
-	db, err := database.NewPostgres(dsn, cfg.Database.Driver)
+	db, err := database.NewPostgres(ctx, dsn, cfg.Database.Driver)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed init postgres")
+		logger.FatalKV(ctx, "failed to init postgres", "err", err)
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			logger.ErrorKV(ctx, "failed to close database connection", "err", err)
+		}
+	}()
 
 	if *migration {
 		if err = goose.Up(db.DB, cfg.Database.Migrations); err != nil {
-			log.Error().Err(err).Msg("Migration failed")
+			logger.ErrorKV(ctx, "migration failed", "err", err)
 
 			return
 		}
 	}
 
-	tracing, err := tracer.NewTracer(&cfg)
+	tracing, err := tracer.NewTracer(ctx, &cfg)
 	if err != nil {
-		log.Error().Err(err).Msg("Failed init tracing")
+		logger.ErrorKV(ctx, "failed to init tracing", "err", err)
 
 		return
 	}
-	defer tracing.Close()
+	defer func() {
+		if err := tracing.Close(); err != nil {
+			logger.ErrorKV(ctx, "failed to close tracer", "err", err)
+		}
+	}()
 
-	if err := server.NewGrpcServer(db, batchSize).Start(&cfg); err != nil {
-		log.Error().Err(err).Msg("Failed creating gRPC server")
+	if err := server.NewGrpcServer(db, batchSize).Start(ctx, &cfg); err != nil {
+		logger.ErrorKV(ctx, "failed to create gRPC server", "err", err)
 
 		return
+	}
+}
+
+func initLogger(ctx context.Context, cfg config.Config) (syncFn func()) {
+	loggingLevel := zap.InfoLevel
+	if cfg.Project.Debug {
+		loggingLevel = zap.DebugLevel
+	}
+
+	consoleCore := zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		os.Stderr,
+		zap.NewAtomicLevelAt(loggingLevel),
+	)
+
+	gelfCore, err := gelf.NewCore(
+		gelf.Addr(cfg.Telemetry.GraylogPath),
+		gelf.Level(loggingLevel),
+	)
+	if err != nil {
+		logger.FatalKV(ctx, "gelf.NewCore() error", "err", err)
+	}
+
+	notSugaredLogger := zap.New(zapcore.NewTee(consoleCore, gelfCore))
+
+	sugaredLogger := notSugaredLogger.Sugar()
+	logger.SetLogger(sugaredLogger.With("service", cfg.Project.Name))
+
+	return func() {
+		if err := notSugaredLogger.Sync(); err != nil {
+			logger.ErrorKV(ctx, "failed to sync logger", "err", err)
+		}
 	}
 }
