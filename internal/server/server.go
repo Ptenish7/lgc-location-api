@@ -29,6 +29,7 @@ import (
 	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
 	"github.com/ozonmp/lgc-location-api/internal/repo"
 	"github.com/ozonmp/lgc-location-api/internal/server/middleware/log_level"
+	"github.com/ozonmp/lgc-location-api/internal/server/middleware/log_verbose"
 	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"
 )
 
@@ -111,6 +112,7 @@ func (s *GrpcServer) Start(ctx context.Context, cfg *config.Config) error {
 			grpc_opentracing.UnaryServerInterceptor(),
 			grpcrecovery.UnaryServerInterceptor(),
 			log_level.UnaryServerInterceptor(),
+			log_verbose.UnaryServerInterceptor(),
 		)),
 	)
 
