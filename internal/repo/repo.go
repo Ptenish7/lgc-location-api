@@ -7,6 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/opentracing/opentracing-go"
 
+	"github.com/ozonmp/lgc-location-api/internal/metrics"
 	"github.com/ozonmp/lgc-location-api/internal/model"
 )
 
@@ -43,6 +44,10 @@ func (r *repo) CreateLocation(ctx context.Context, latitude float64, longitude f
 
 	var insertedID uint64
 	err := query.QueryRowContext(ctx).Scan(&insertedID)
+
+	if err == nil {
+		metrics.IncEventCUDCounter(model.Created)
+	}
 
 	return insertedID, err
 }
@@ -136,6 +141,8 @@ func (r *repo) RemoveLocation(ctx context.Context, locationID uint64) (bool, err
 	if rowsAffected == 0 {
 		return false, nil
 	}
+
+	metrics.IncEventCUDCounter(model.Removed)
 
 	return true, nil
 }

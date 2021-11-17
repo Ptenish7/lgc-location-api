@@ -2,10 +2,13 @@ package api
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"github.com/ozonmp/lgc-location-api/internal/metrics"
 	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
 	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"
 )
@@ -24,6 +27,10 @@ func (l *locationAPI) DescribeLocationV1(
 	location, err := l.repo.DescribeLocation(ctx, req.LocationId)
 	if err != nil {
 		logger.ErrorKV(ctx, "DescribeLocationV1 failed on repo call", "err", err)
+
+		if errors.Is(err, sql.ErrNoRows) {
+			metrics.IncLocationNotFoundCounter()
+		}
 
 		return nil, status.Error(codes.Internal, err.Error())
 	}

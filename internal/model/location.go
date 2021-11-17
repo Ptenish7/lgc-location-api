@@ -40,6 +40,15 @@ func (t *EventType) Scan(src interface{}) error {
 	return fmt.Errorf("EventType name not found: %s", src)
 }
 
+// Value converts EventType to DB enum value
+func (t EventType) Value() (driver.Value, error) {
+	return t.String(), nil
+}
+
+func (t EventType) String() string {
+	return eventTypeNames[t-1]
+}
+
 // EventTypeExtra type alias
 type EventTypeExtra uint16
 
@@ -71,11 +80,6 @@ func (e EventTypeExtra) HasLongitude() bool {
 // HasTitle returns true if title bit is set to 1
 func (e EventTypeExtra) HasTitle() bool {
 	return (e & EventTypeExtra(4)) == 4
-}
-
-// Value converts EventType to DB enum value
-func (t EventType) Value() (driver.Value, error) {
-	return eventTypeNames[t-1], nil
 }
 
 // EventStatus type alias

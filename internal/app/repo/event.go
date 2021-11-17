@@ -8,6 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/protobuf/encoding/protojson"
 
+	"github.com/ozonmp/lgc-location-api/internal/metrics"
 	"github.com/ozonmp/lgc-location-api/internal/model"
 	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"
 )
@@ -55,6 +56,10 @@ func (r *eventRepo) Lock(ctx context.Context, n uint64) ([]model.LocationEvent, 
 	var result []model.LocationEvent
 	err = r.db.SelectContext(ctx, &result, s, args...)
 
+	if err != nil {
+		metrics.AddEventsInRetranslator(len(result))
+	}
+
 	return result, err
 }
 
@@ -80,6 +85,8 @@ func (r *eventRepo) Unlock(ctx context.Context, eventIDs []uint64) error {
 	if rowsAffected != int64(len(eventIDs)) {
 		return fmt.Errorf("%d rows were updated; want %d", rowsAffected, len(eventIDs))
 	}
+
+	metrics.SubtractEventsInRetranslator(int(rowsAffected))
 
 	return nil
 }
@@ -146,6 +153,8 @@ func (r *eventRepo) Remove(ctx context.Context, eventIDs []uint64) error {
 	if rowsAffected != int64(len(eventIDs)) {
 		return fmt.Errorf("%d rows were deleted; want %d", rowsAffected, len(eventIDs))
 	}
+
+	metrics.SubtractEventsInRetranslator(int(rowsAffected))
 
 	return nil
 }
