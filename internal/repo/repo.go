@@ -49,7 +49,12 @@ func (r *repo) CreateLocation(ctx context.Context, latitude float64, longitude f
 
 // DescribeLocation returns a location by id
 func (r *repo) DescribeLocation(ctx context.Context, locationID uint64) (*model.Location, error) {
-	span, _ := opentracing.StartSpanFromContext(ctx, "repo.DescribeLocation")
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.DescribeLocation",
+		opentracing.Tag{
+			Key:   "locationID",
+			Value: locationID,
+		},
+	)
 	defer span.Finish()
 
 	query := psql.
@@ -70,7 +75,16 @@ func (r *repo) DescribeLocation(ctx context.Context, locationID uint64) (*model.
 
 // ListLocations returns all locations
 func (r *repo) ListLocations(ctx context.Context, limit uint64, cursor uint64) ([]*model.Location, error) {
-	span, _ := opentracing.StartSpanFromContext(ctx, "repo.ListLocations")
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.ListLocations",
+		opentracing.Tag{
+			Key:   "limit",
+			Value: limit,
+		},
+		opentracing.Tag{
+			Key:   "cursor",
+			Value: cursor,
+		},
+	)
 	defer span.Finish()
 
 	query := psql.
@@ -94,7 +108,12 @@ func (r *repo) ListLocations(ctx context.Context, limit uint64, cursor uint64) (
 
 // RemoveLocation removes a location by id
 func (r *repo) RemoveLocation(ctx context.Context, locationID uint64) (bool, error) {
-	span, _ := opentracing.StartSpanFromContext(ctx, "repo.RemoveLocation")
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.RemoveLocation",
+		opentracing.Tag{
+			Key:   "locationID",
+			Value: locationID,
+		},
+	)
 	defer span.Finish()
 
 	query := psql.
