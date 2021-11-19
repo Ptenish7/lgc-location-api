@@ -94,8 +94,8 @@ func (s *GrpcServer) Start(ctx context.Context, cfg *config.Config) error {
 		return fmt.Errorf("failed to listen: %w", err)
 	}
 	defer func() {
-		if err := l.Close(); err != nil {
-			logger.ErrorKV(ctx, "failed to close listener")
+		if clErr := l.Close(); clErr != nil {
+			logger.ErrorKV(ctx, "failed to close listener", "err", clErr)
 		}
 	}()
 
@@ -125,8 +125,8 @@ func (s *GrpcServer) Start(ctx context.Context, cfg *config.Config) error {
 
 	go func() {
 		logger.InfoKV(ctx, fmt.Sprintf("gRPC server is listening on %s", grpcAddr))
-		if err := grpcServer.Serve(l); err != nil {
-			logger.FatalKV(ctx, "failed to run gRPC server", "err", err)
+		if serveErr := grpcServer.Serve(l); serveErr != nil {
+			logger.FatalKV(ctx, "failed to run gRPC server", "err", serveErr)
 		}
 	}()
 

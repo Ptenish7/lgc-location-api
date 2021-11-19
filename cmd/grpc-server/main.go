@@ -63,8 +63,8 @@ func main() {
 		logger.FatalKV(ctx, "failed to init postgres", "err", err)
 	}
 	defer func() {
-		if err := db.Close(); err != nil {
-			logger.ErrorKV(ctx, "failed to close database connection", "err", err)
+		if clErr := db.Close(); clErr != nil {
+			logger.ErrorKV(ctx, "failed to close database connection", "err", clErr)
 		}
 	}()
 
@@ -83,8 +83,8 @@ func main() {
 		return
 	}
 	defer func() {
-		if err := tracing.Close(); err != nil {
-			logger.ErrorKV(ctx, "failed to close tracer", "err", err)
+		if clErr := tracing.Close(); clErr != nil {
+			logger.ErrorKV(ctx, "failed to close tracer", "err", clErr)
 		}
 	}()
 
@@ -121,8 +121,8 @@ func initLogger(ctx context.Context, cfg config.Config) (syncFn func()) {
 	logger.SetLogger(sugaredLogger.With("service", cfg.Project.Name))
 
 	return func() {
-		if err := notSugaredLogger.Sync(); err != nil {
-			logger.ErrorKV(ctx, "failed to sync logger", "err", err)
+		if syncErr := notSugaredLogger.Sync(); syncErr != nil {
+			logger.ErrorKV(ctx, "failed to sync logger", "err", syncErr)
 		}
 	}
 }
