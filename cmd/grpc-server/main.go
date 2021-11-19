@@ -41,7 +41,8 @@ func main() {
 	defer syncLogger()
 
 	logger.InfoKV(
-		ctx, fmt.Sprintf("starting service: %s", cfg.Project.Name),
+		ctx, "starting service",
+		"name", cfg.Project.Name,
 		"version", cfg.Project.Version,
 		"commitHash", cfg.Project.CommitHash,
 		"debug", cfg.Project.Debug,

@@ -23,7 +23,7 @@ func (l *locationAPI) ListLocationsV1(
 
 	locations, err := l.repo.ListLocations(ctx, 100, 0)
 	if err != nil {
-		logger.ErrorKV(ctx, "ListLocationsV1 failed on repo call")
+		logger.ErrorKV(ctx, "ListLocationsV1 failed on repo call", "err", err)
 
 		return nil, status.Error(codes.Internal, err.Error())
 	}

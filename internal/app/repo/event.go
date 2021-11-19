@@ -55,7 +55,6 @@ func (r *eventRepo) Lock(ctx context.Context, n uint64) ([]model.LocationEvent, 
 
 	var result []model.LocationEvent
 	err = r.db.SelectContext(ctx, &result, s, args...)
-
 	if err != nil {
 		metrics.AddEventsInRetranslator(len(result))
 	}
