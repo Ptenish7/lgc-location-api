@@ -48,6 +48,18 @@
             "required": false,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "Grpc-Metadata-Log-Level",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Grpc-Metadata-Log-Verbose",
+            "in": "header",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -79,6 +91,18 @@
             "schema": {
               "$ref": "#/definitions/v1CreateLocationV1Request"
             }
+          },
+          {
+            "name": "Grpc-Metadata-Log-Level",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Grpc-Metadata-Log-Verbose",
+            "in": "header",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -111,6 +135,18 @@
             "required": true,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "Grpc-Metadata-Log-Level",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Grpc-Metadata-Log-Verbose",
+            "in": "header",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -141,6 +177,18 @@
             "required": true,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "Grpc-Metadata-Log-Level",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Grpc-Metadata-Log-Verbose",
+            "in": "header",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [

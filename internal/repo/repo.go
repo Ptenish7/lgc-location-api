@@ -5,7 +5,9 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
+	"github.com/opentracing/opentracing-go"
 
+	"github.com/ozonmp/lgc-location-api/internal/metrics"
 	"github.com/ozonmp/lgc-location-api/internal/model"
 )
 
@@ -31,6 +33,9 @@ func NewRepo(db *sqlx.DB, batchSize uint) Repo {
 
 // CreateLocation creates a new location
 func (r *repo) CreateLocation(ctx context.Context, latitude float64, longitude float64, title string) (uint64, error) {
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.CreateLocation")
+	defer span.Finish()
+
 	query := psql.
 		Insert("locations").
 		Columns("latitude", "longitude", "title").
@@ -40,11 +45,23 @@ func (r *repo) CreateLocation(ctx context.Context, latitude float64, longitude f
 	var insertedID uint64
 	err := query.QueryRowContext(ctx).Scan(&insertedID)
 
+	if err == nil {
+		metrics.IncEventCUDCounter(model.Created)
+	}
+
 	return insertedID, err
 }
 
 // DescribeLocation returns a location by id
 func (r *repo) DescribeLocation(ctx context.Context, locationID uint64) (*model.Location, error) {
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.DescribeLocation",
+		opentracing.Tag{
+			Key:   "locationID",
+			Value: locationID,
+		},
+	)
+	defer span.Finish()
+
 	query := psql.
 		Select("*").
 		From("locations").
@@ -63,6 +80,18 @@ func (r *repo) DescribeLocation(ctx context.Context, locationID uint64) (*model.
 
 // ListLocations returns all locations
 func (r *repo) ListLocations(ctx context.Context, limit uint64, cursor uint64) ([]*model.Location, error) {
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.ListLocations",
+		opentracing.Tag{
+			Key:   "limit",
+			Value: limit,
+		},
+		opentracing.Tag{
+			Key:   "cursor",
+			Value: cursor,
+		},
+	)
+	defer span.Finish()
+
 	query := psql.
 		Select("*").
 		From("locations").
@@ -84,6 +113,14 @@ func (r *repo) ListLocations(ctx context.Context, limit uint64, cursor uint64) (
 
 // RemoveLocation removes a location by id
 func (r *repo) RemoveLocation(ctx context.Context, locationID uint64) (bool, error) {
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.RemoveLocation",
+		opentracing.Tag{
+			Key:   "locationID",
+			Value: locationID,
+		},
+	)
+	defer span.Finish()
+
 	query := psql.
 		Update("locations").
 		Set("removed", true).
@@ -104,6 +141,8 @@ func (r *repo) RemoveLocation(ctx context.Context, locationID uint64) (bool, err
 	if rowsAffected == 0 {
 		return false, nil
 	}
+
+	metrics.IncEventCUDCounter(model.Removed)
 
 	return true, nil
 }
