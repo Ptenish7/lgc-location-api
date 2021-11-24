@@ -117,8 +117,8 @@ func (r *eventRepo) Lock(ctx context.Context, n uint64) ([]model.LocationEvent, 
 	}
 
 	result := make([]model.LocationEvent, 0, len(resultPb))
-	for _, v := range resultPb {
-		result = append(result, convertProtobufToLocationEvent(&v))
+	for i := range resultPb {
+		result = append(result, convertProtobufToLocationEvent(&resultPb[i]))
 	}
 
 	return result, err
