@@ -55,7 +55,7 @@ func (p *locationPayload) Scan(src interface{}) error {
 	return nil
 }
 
-func convertProtobufToLocation(pb *locationEvent) model.LocationEvent {
+func convertProtobufToLocationEvent(pb *locationEvent) model.LocationEvent {
 	return model.LocationEvent{
 		ID:         pb.ID,
 		LocationID: pb.LocationID,
@@ -118,7 +118,7 @@ func (r *eventRepo) Lock(ctx context.Context, n uint64) ([]model.LocationEvent, 
 
 	result := make([]model.LocationEvent, 0, len(resultPb))
 	for _, v := range resultPb {
-		result = append(result, convertProtobufToLocation(&v))
+		result = append(result, convertProtobufToLocationEvent(&v))
 	}
 
 	return result, err
