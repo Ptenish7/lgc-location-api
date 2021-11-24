@@ -11,6 +11,7 @@ if typing.TYPE_CHECKING:
 
 import validate.validate_pb2
 import google.api.annotations_pb2
+import google.protobuf.timestamp_pb2
 import ozonmp.lgc_location_api.v1.lgc_location_api_pb2
 
 
@@ -26,6 +27,10 @@ class LgcLocationApiServiceBase(abc.ABC):
 
     @abc.abstractmethod
     async def ListLocationsV1(self, stream: 'grpclib.server.Stream[ozonmp.lgc_location_api.v1.lgc_location_api_pb2.ListLocationsV1Request, ozonmp.lgc_location_api.v1.lgc_location_api_pb2.ListLocationsV1Response]') -> None:
+        pass
+
+    @abc.abstractmethod
+    async def UpdateLocationV1(self, stream: 'grpclib.server.Stream[ozonmp.lgc_location_api.v1.lgc_location_api_pb2.UpdateLocationV1Request, ozonmp.lgc_location_api.v1.lgc_location_api_pb2.UpdateLocationV1Response]') -> None:
         pass
 
     @abc.abstractmethod
@@ -51,6 +56,12 @@ class LgcLocationApiServiceBase(abc.ABC):
                 grpclib.const.Cardinality.UNARY_UNARY,
                 ozonmp.lgc_location_api.v1.lgc_location_api_pb2.ListLocationsV1Request,
                 ozonmp.lgc_location_api.v1.lgc_location_api_pb2.ListLocationsV1Response,
+            ),
+            '/ozonmp.lgc_location_api.v1.LgcLocationApiService/UpdateLocationV1': grpclib.const.Handler(
+                self.UpdateLocationV1,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                ozonmp.lgc_location_api.v1.lgc_location_api_pb2.UpdateLocationV1Request,
+                ozonmp.lgc_location_api.v1.lgc_location_api_pb2.UpdateLocationV1Response,
             ),
             '/ozonmp.lgc_location_api.v1.LgcLocationApiService/RemoveLocationV1': grpclib.const.Handler(
                 self.RemoveLocationV1,
@@ -81,6 +92,12 @@ class LgcLocationApiServiceStub:
             '/ozonmp.lgc_location_api.v1.LgcLocationApiService/ListLocationsV1',
             ozonmp.lgc_location_api.v1.lgc_location_api_pb2.ListLocationsV1Request,
             ozonmp.lgc_location_api.v1.lgc_location_api_pb2.ListLocationsV1Response,
+        )
+        self.UpdateLocationV1 = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/ozonmp.lgc_location_api.v1.LgcLocationApiService/UpdateLocationV1',
+            ozonmp.lgc_location_api.v1.lgc_location_api_pb2.UpdateLocationV1Request,
+            ozonmp.lgc_location_api.v1.lgc_location_api_pb2.UpdateLocationV1Response,
         )
         self.RemoveLocationV1 = grpclib.client.UnaryUnaryMethod(
             channel,

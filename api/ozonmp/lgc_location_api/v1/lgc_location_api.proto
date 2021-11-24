@@ -97,7 +97,7 @@ message LocationEvent {
   uint64 id = 1;
   uint64 location_id = 2;
   uint32 type = 3;
-  uint32 extraType = 4;
+  uint32 extra_type = 4;
   uint32 status = 5;
   Location entity = 6;
   google.protobuf.Timestamp updated_at = 7;
