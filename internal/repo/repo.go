@@ -15,6 +15,7 @@ import (
 var (
 	psql = sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
+	// ErrLocationNotFound indicates that specified location was not found in repo
 	ErrLocationNotFound = errors.New("location not found")
 )
 
