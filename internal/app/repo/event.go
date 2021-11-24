@@ -2,7 +2,9 @@ package eventrepo
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -14,6 +16,61 @@ import (
 )
 
 var psql = sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
+type locationEvent struct {
+	ID         uint64               `db:"id"`
+	LocationID uint64               `db:"location_id"`
+	Type       model.EventType      `db:"type"`
+	TypeExtra  model.EventTypeExtra `db:"type_extra"`
+	Status     model.EventStatus    `db:"status"`
+	Entity     locationPayload      `db:"payload"`
+	UpdatedAt  time.Time            `db:"updated_at"`
+}
+
+type locationPayload pb.Location
+
+func (p *locationPayload) Scan(src interface{}) error {
+	var source []byte
+	switch src.(type) {
+	case string:
+		source = []byte(src.(string))
+	case []byte:
+		source = src.([]byte)
+	default:
+		return errors.New("incompatible type for locationPayload")
+	}
+
+	pl := &pb.Location{}
+
+	err := protojson.Unmarshal(source, pl)
+	if err != nil {
+		return err
+	}
+
+	p.Id = pl.Id
+	p.Latitude = pl.Latitude
+	p.Longitude = pl.Longitude
+	p.Title = pl.Title
+
+	return nil
+}
+
+func convertProtobufToLocation(pb *locationEvent) model.LocationEvent {
+	return model.LocationEvent{
+		ID:         pb.ID,
+		LocationID: pb.LocationID,
+		Type:       pb.Type,
+		TypeExtra:  pb.TypeExtra,
+		Status:     pb.Status,
+		Entity: &model.Location{
+			ID:        pb.Entity.Id,
+			Latitude:  pb.Entity.Latitude,
+			Longitude: pb.Entity.Longitude,
+			Title:     pb.Entity.Title,
+		},
+		UpdatedAt: pb.UpdatedAt,
+	}
+}
 
 // EventRepo interface
 type EventRepo interface {
@@ -53,10 +110,15 @@ func (r *eventRepo) Lock(ctx context.Context, n uint64) ([]model.LocationEvent, 
 		return nil, err
 	}
 
-	var result []model.LocationEvent
-	err = r.db.SelectContext(ctx, &result, s, args...)
+	var resultPb []locationEvent
+	err = r.db.SelectContext(ctx, &resultPb, s, args...)
 	if err != nil {
-		metrics.AddEventsInRetranslator(len(result))
+		metrics.AddEventsInRetranslator(len(resultPb))
+	}
+
+	result := make([]model.LocationEvent, 0, len(resultPb))
+	for _, v := range resultPb {
+		result = append(result, convertProtobufToLocation(&v))
 	}
 
 	return result, err
