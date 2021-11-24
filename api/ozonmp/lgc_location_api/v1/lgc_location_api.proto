@@ -4,6 +4,7 @@ package ozonmp.lgc_location_api.v1;
 
 import "validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_api";
 
@@ -76,4 +77,14 @@ message RemoveLocationV1Request {
 
 message RemoveLocationV1Response {
   bool found = 1;
+}
+
+message LocationEvent {
+  uint64 id = 1;
+  uint64 location_id = 2;
+  uint32 type = 3;
+  uint32 extraType = 4;
+  uint32 status = 5;
+  Location entity = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
