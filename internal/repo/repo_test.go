@@ -9,6 +9,8 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/ozonmp/lgc-location-api/internal/model"
 )
 
 type RepoTestSuite struct {
@@ -79,13 +81,27 @@ func (s *RepoTestSuite) TestListLocation() {
 	}
 }
 
+func (s *RepoTestSuite) TestUpdateLocation() {
+	s.mock.
+		ExpectExec(regexp.QuoteMeta(`UPDATE locations SET latitude = $1, longitude = $2, title = $3, updated_at = $4 WHERE id = $5 AND removed = $6`)).
+		WithArgs(10.0, 20.0, "L1", "now()", 1, false).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+
+	err := s.r.UpdateLocation(context.Background(), &model.Location{ID: 1, Latitude: 10, Longitude: 20, Title: "L1"})
+	s.Nil(err)
+
+	if err := s.mock.ExpectationsWereMet(); err != nil {
+		s.T().Errorf("there were unfulfilled expectations: %s", err)
+	}
+}
+
 func (s *RepoTestSuite) TestRemoveLocation() {
 	s.mock.
 		ExpectExec(regexp.QuoteMeta(`UPDATE locations SET removed = $1, updated_at = $2 WHERE id = $3 AND removed = $4`)).
 		WithArgs(true, "now()", 1, false).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
-	_, err := s.r.RemoveLocation(context.Background(), 1)
+	err := s.r.RemoveLocation(context.Background(), 1)
 	s.Nil(err)
 
 	if err := s.mock.ExpectationsWereMet(); err != nil {

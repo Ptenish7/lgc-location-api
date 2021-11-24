@@ -576,6 +576,168 @@ var _ interface {
 	ErrorName() string
 } = ListLocationsV1ResponseValidationError{}
 
+// Validate checks the field values on UpdateLocationV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateLocationV1Request) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetLocationId() <= 0 {
+		return UpdateLocationV1RequestValidationError{
+			field:  "LocationId",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	if val := m.GetLatitude(); val < -90 || val > 90 {
+		return UpdateLocationV1RequestValidationError{
+			field:  "Latitude",
+			reason: "value must be inside range [-90, 90]",
+		}
+	}
+
+	if val := m.GetLongitude(); val < -180 || val > 180 {
+		return UpdateLocationV1RequestValidationError{
+			field:  "Longitude",
+			reason: "value must be inside range [-180, 180]",
+		}
+	}
+
+	if utf8.RuneCountInString(m.GetTitle()) < 1 {
+		return UpdateLocationV1RequestValidationError{
+			field:  "Title",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
+	return nil
+}
+
+// UpdateLocationV1RequestValidationError is the validation error returned by
+// UpdateLocationV1Request.Validate if the designated constraints aren't met.
+type UpdateLocationV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateLocationV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateLocationV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateLocationV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateLocationV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateLocationV1RequestValidationError) ErrorName() string {
+	return "UpdateLocationV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateLocationV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateLocationV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateLocationV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateLocationV1RequestValidationError{}
+
+// Validate checks the field values on UpdateLocationV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateLocationV1Response) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// UpdateLocationV1ResponseValidationError is the validation error returned by
+// UpdateLocationV1Response.Validate if the designated constraints aren't met.
+type UpdateLocationV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateLocationV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateLocationV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateLocationV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateLocationV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateLocationV1ResponseValidationError) ErrorName() string {
+	return "UpdateLocationV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateLocationV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateLocationV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateLocationV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateLocationV1ResponseValidationError{}
+
 // Validate checks the field values on RemoveLocationV1Request with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -657,8 +819,6 @@ func (m *RemoveLocationV1Response) Validate() error {
 	if m == nil {
 		return nil
 	}
-
-	// no validation rules for Found
 
 	return nil
 }

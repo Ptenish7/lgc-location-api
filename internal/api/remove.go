@@ -22,7 +22,7 @@ func (l *locationAPI) RemoveLocationV1(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	found, err := l.repo.RemoveLocation(ctx, req.LocationId)
+	err := l.repo.RemoveLocation(ctx, req.LocationId)
 	if err != nil {
 		logger.ErrorKV(ctx, "RemoveLocationV1 failed on repo call", "err", err)
 
@@ -43,5 +43,5 @@ func (l *locationAPI) RemoveLocationV1(
 
 	logger.DebugKV(ctx, "RemoveLocationV1 succeeded")
 
-	return &pb.RemoveLocationV1Response{Found: found}, nil
+	return &pb.RemoveLocationV1Response{}, nil
 }

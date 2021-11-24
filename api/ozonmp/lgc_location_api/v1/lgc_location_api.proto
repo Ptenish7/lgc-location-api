@@ -29,6 +29,13 @@ service LgcLocationApiService {
       get: "/api/v1/locations"
     };
   }
+  // UpdateLocationV1 - Update a location
+  rpc UpdateLocationV1(UpdateLocationV1Request) returns (UpdateLocationV1Response) {
+    option (google.api.http) = {
+      put: "/api/v1/locations"
+      body: "*"
+    };
+  }
   // RemoveLocationV1 - Remove a location
   rpc RemoveLocationV1(RemoveLocationV1Request) returns (RemoveLocationV1Response) {
     option (google.api.http) = {
@@ -71,13 +78,20 @@ message ListLocationsV1Response {
   repeated Location locations = 1;
 }
 
+message UpdateLocationV1Request {
+  uint64 location_id = 1 [(validate.rules).uint64.gt = 0];
+  double latitude = 2 [(validate.rules).double = {gte: -90, lte: 90}];
+  double longitude = 3 [(validate.rules).double = {gte: -180, lte: 180}];
+  string title = 4 [(validate.rules).string.min_len = 1];
+}
+
+message UpdateLocationV1Response {}
+
 message RemoveLocationV1Request {
   uint64 location_id = 1 [(validate.rules).uint64.gt = 0];
 }
 
-message RemoveLocationV1Response {
-  bool found = 1;
-}
+message RemoveLocationV1Response {}
 
 message LocationEvent {
   uint64 id = 1;

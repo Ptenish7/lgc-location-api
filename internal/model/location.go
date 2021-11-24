@@ -52,6 +52,16 @@ func (t EventType) String() string {
 // EventTypeExtra type alias
 type EventTypeExtra uint16
 
+// EmptyEventTypeExtra returns empty value for EventTypeExtra
+func EmptyEventTypeExtra() EventTypeExtra {
+	return EventTypeExtra(0)
+}
+
+// FullEventTypeExtra returns EventTypeExtra with all bits set
+func FullEventTypeExtra() EventTypeExtra {
+	return EmptyEventTypeExtra().WithLatitude().WithLongitude().WithTitle()
+}
+
 // WithLatitude adds latitude bits
 func (e EventTypeExtra) WithLatitude() EventTypeExtra {
 	return e | EventTypeExtra(1)
