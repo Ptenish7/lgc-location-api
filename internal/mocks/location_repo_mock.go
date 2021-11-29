@@ -81,16 +81,29 @@ func (mr *MockRepoMockRecorder) ListLocations(arg0, arg1, arg2 interface{}) *gom
 }
 
 // RemoveLocation mocks base method.
-func (m *MockRepo) RemoveLocation(arg0 context.Context, arg1 uint64) (bool, error) {
+func (m *MockRepo) RemoveLocation(arg0 context.Context, arg1 uint64) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveLocation", arg0, arg1)
-	ret0, _ := ret[0].(bool)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // RemoveLocation indicates an expected call of RemoveLocation.
 func (mr *MockRepoMockRecorder) RemoveLocation(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveLocation", reflect.TypeOf((*MockRepo)(nil).RemoveLocation), arg0, arg1)
+}
+
+// UpdateLocation mocks base method.
+func (m *MockRepo) UpdateLocation(arg0 context.Context, arg1 *model.Location) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateLocation", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateLocation indicates an expected call of UpdateLocation.
+func (mr *MockRepoMockRecorder) UpdateLocation(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLocation", reflect.TypeOf((*MockRepo)(nil).UpdateLocation), arg0, arg1)
 }

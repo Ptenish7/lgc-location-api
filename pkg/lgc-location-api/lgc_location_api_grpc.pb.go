@@ -24,6 +24,8 @@ type LgcLocationApiServiceClient interface {
 	DescribeLocationV1(ctx context.Context, in *DescribeLocationV1Request, opts ...grpc.CallOption) (*DescribeLocationV1Response, error)
 	// ListLocationsV1 - List locations
 	ListLocationsV1(ctx context.Context, in *ListLocationsV1Request, opts ...grpc.CallOption) (*ListLocationsV1Response, error)
+	// UpdateLocationV1 - Update a location
+	UpdateLocationV1(ctx context.Context, in *UpdateLocationV1Request, opts ...grpc.CallOption) (*UpdateLocationV1Response, error)
 	// RemoveLocationV1 - Remove a location
 	RemoveLocationV1(ctx context.Context, in *RemoveLocationV1Request, opts ...grpc.CallOption) (*RemoveLocationV1Response, error)
 }
@@ -63,6 +65,15 @@ func (c *lgcLocationApiServiceClient) ListLocationsV1(ctx context.Context, in *L
 	return out, nil
 }
 
+func (c *lgcLocationApiServiceClient) UpdateLocationV1(ctx context.Context, in *UpdateLocationV1Request, opts ...grpc.CallOption) (*UpdateLocationV1Response, error) {
+	out := new(UpdateLocationV1Response)
+	err := c.cc.Invoke(ctx, "/ozonmp.lgc_location_api.v1.LgcLocationApiService/UpdateLocationV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *lgcLocationApiServiceClient) RemoveLocationV1(ctx context.Context, in *RemoveLocationV1Request, opts ...grpc.CallOption) (*RemoveLocationV1Response, error) {
 	out := new(RemoveLocationV1Response)
 	err := c.cc.Invoke(ctx, "/ozonmp.lgc_location_api.v1.LgcLocationApiService/RemoveLocationV1", in, out, opts...)
@@ -82,6 +93,8 @@ type LgcLocationApiServiceServer interface {
 	DescribeLocationV1(context.Context, *DescribeLocationV1Request) (*DescribeLocationV1Response, error)
 	// ListLocationsV1 - List locations
 	ListLocationsV1(context.Context, *ListLocationsV1Request) (*ListLocationsV1Response, error)
+	// UpdateLocationV1 - Update a location
+	UpdateLocationV1(context.Context, *UpdateLocationV1Request) (*UpdateLocationV1Response, error)
 	// RemoveLocationV1 - Remove a location
 	RemoveLocationV1(context.Context, *RemoveLocationV1Request) (*RemoveLocationV1Response, error)
 	mustEmbedUnimplementedLgcLocationApiServiceServer()
@@ -99,6 +112,9 @@ func (UnimplementedLgcLocationApiServiceServer) DescribeLocationV1(context.Conte
 }
 func (UnimplementedLgcLocationApiServiceServer) ListLocationsV1(context.Context, *ListLocationsV1Request) (*ListLocationsV1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListLocationsV1 not implemented")
+}
+func (UnimplementedLgcLocationApiServiceServer) UpdateLocationV1(context.Context, *UpdateLocationV1Request) (*UpdateLocationV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateLocationV1 not implemented")
 }
 func (UnimplementedLgcLocationApiServiceServer) RemoveLocationV1(context.Context, *RemoveLocationV1Request) (*RemoveLocationV1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveLocationV1 not implemented")
@@ -170,6 +186,24 @@ func _LgcLocationApiService_ListLocationsV1_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LgcLocationApiService_UpdateLocationV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLocationV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LgcLocationApiServiceServer).UpdateLocationV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ozonmp.lgc_location_api.v1.LgcLocationApiService/UpdateLocationV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LgcLocationApiServiceServer).UpdateLocationV1(ctx, req.(*UpdateLocationV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _LgcLocationApiService_RemoveLocationV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RemoveLocationV1Request)
 	if err := dec(in); err != nil {
@@ -206,6 +240,10 @@ var LgcLocationApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListLocationsV1",
 			Handler:    _LgcLocationApiService_ListLocationsV1_Handler,
+		},
+		{
+			MethodName: "UpdateLocationV1",
+			Handler:    _LgcLocationApiService_UpdateLocationV1_Handler,
 		},
 		{
 			MethodName: "RemoveLocationV1",

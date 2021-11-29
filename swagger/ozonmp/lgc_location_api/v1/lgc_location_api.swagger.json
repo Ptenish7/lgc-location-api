@@ -108,6 +108,49 @@
         "tags": [
           "LgcLocationApiService"
         ]
+      },
+      "put": {
+        "summary": "UpdateLocationV1 - Update a location",
+        "operationId": "LgcLocationApiService_UpdateLocationV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateLocationV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateLocationV1Request"
+            }
+          },
+          {
+            "name": "Grpc-Metadata-Log-Level",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Grpc-Metadata-Log-Verbose",
+            "in": "header",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "LgcLocationApiService"
+        ]
       }
     },
     "/api/v1/locations/{locationId}": {
@@ -293,12 +336,30 @@
       }
     },
     "v1RemoveLocationV1Response": {
+      "type": "object"
+    },
+    "v1UpdateLocationV1Request": {
       "type": "object",
       "properties": {
-        "found": {
-          "type": "boolean"
+        "locationId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "double"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "double"
+        },
+        "title": {
+          "type": "string"
         }
       }
+    },
+    "v1UpdateLocationV1Response": {
+      "type": "object"
     }
   }
 }

@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"errors"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -11,14 +12,20 @@ import (
 	"github.com/ozonmp/lgc-location-api/internal/model"
 )
 
-var psql = sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+var (
+	psql = sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
+	// ErrLocationNotFound indicates that specified location was not found in repo
+	ErrLocationNotFound = errors.New("location not found")
+)
 
 // Repo is DAO for Location
 type Repo interface {
 	CreateLocation(ctx context.Context, latitude float64, longitude float64, title string) (uint64, error)
 	DescribeLocation(ctx context.Context, locationID uint64) (*model.Location, error)
 	ListLocations(ctx context.Context, limit uint64, cursor uint64) ([]*model.Location, error)
-	RemoveLocation(ctx context.Context, locationID uint64) (bool, error)
+	UpdateLocation(ctx context.Context, location *model.Location) error
+	RemoveLocation(ctx context.Context, locationID uint64) error
 }
 
 type repo struct {
@@ -111,8 +118,46 @@ func (r *repo) ListLocations(ctx context.Context, limit uint64, cursor uint64) (
 	return result, err
 }
 
+// UpdateLocation updates specified location
+func (r *repo) UpdateLocation(ctx context.Context, location *model.Location) error {
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.RemoveLocation",
+		opentracing.Tag{
+			Key:   "locationID",
+			Value: location.ID,
+		},
+	)
+	defer span.Finish()
+
+	query := psql.
+		Update("locations").
+		Set("latitude", location.Latitude).
+		Set("longitude", location.Longitude).
+		Set("title", location.Title).
+		Set("updated_at", "now()").
+		Where(sq.Eq{"id": location.ID, "removed": false}).
+		RunWith(r.db)
+
+	result, err := query.ExecContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return ErrLocationNotFound
+	}
+
+	metrics.IncEventCUDCounter(model.Updated)
+
+	return nil
+}
+
 // RemoveLocation removes a location by id
-func (r *repo) RemoveLocation(ctx context.Context, locationID uint64) (bool, error) {
+func (r *repo) RemoveLocation(ctx context.Context, locationID uint64) error {
 	span, _ := opentracing.StartSpanFromContext(ctx, "repo.RemoveLocation",
 		opentracing.Tag{
 			Key:   "locationID",
@@ -130,19 +175,19 @@ func (r *repo) RemoveLocation(ctx context.Context, locationID uint64) (bool, err
 
 	result, err := query.ExecContext(ctx)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	if rowsAffected == 0 {
-		return false, nil
+		return ErrLocationNotFound
 	}
 
 	metrics.IncEventCUDCounter(model.Removed)
 
-	return true, nil
+	return nil
 }

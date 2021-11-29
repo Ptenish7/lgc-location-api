@@ -75,20 +75,18 @@ func (p *producer) produce(ctx context.Context) {
 	for {
 		select {
 		case event := <-p.events:
-			if event.Type == model.Created {
-				if err := p.sender.Send(&event); err != nil {
-					log.Printf("failed to send event: %v", err)
-					updateBatch = append(updateBatch, event.ID)
-					if len(updateBatch) == int(p.batchSize) {
-						p.update(ctx, updateBatch)
-						updateBatch = updateBatch[:0]
-					}
-				} else {
-					cleanBatch = append(cleanBatch, event.ID)
-					if len(cleanBatch) == int(p.batchSize) {
-						p.clean(ctx, cleanBatch)
-						cleanBatch = cleanBatch[:0]
-					}
+			if err := p.sender.Send(&event); err != nil {
+				log.Printf("failed to send event: %v", err)
+				updateBatch = append(updateBatch, event.ID)
+				if len(updateBatch) == int(p.batchSize) {
+					p.update(ctx, updateBatch)
+					updateBatch = updateBatch[:0]
+				}
+			} else {
+				cleanBatch = append(cleanBatch, event.ID)
+				if len(cleanBatch) == int(p.batchSize) {
+					p.clean(ctx, cleanBatch)
+					cleanBatch = cleanBatch[:0]
 				}
 			}
 

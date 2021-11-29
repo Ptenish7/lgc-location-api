@@ -4,6 +4,7 @@ package ozonmp.lgc_location_api.v1;
 
 import "validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api;lgc_location_api";
 
@@ -26,6 +27,13 @@ service LgcLocationApiService {
   rpc ListLocationsV1(ListLocationsV1Request) returns (ListLocationsV1Response) {
     option (google.api.http) = {
       get: "/api/v1/locations"
+    };
+  }
+  // UpdateLocationV1 - Update a location
+  rpc UpdateLocationV1(UpdateLocationV1Request) returns (UpdateLocationV1Response) {
+    option (google.api.http) = {
+      put: "/api/v1/locations"
+      body: "*"
     };
   }
   // RemoveLocationV1 - Remove a location
@@ -70,10 +78,27 @@ message ListLocationsV1Response {
   repeated Location locations = 1;
 }
 
+message UpdateLocationV1Request {
+  uint64 location_id = 1 [(validate.rules).uint64.gt = 0];
+  double latitude = 2 [(validate.rules).double = {gte: -90, lte: 90}];
+  double longitude = 3 [(validate.rules).double = {gte: -180, lte: 180}];
+  string title = 4 [(validate.rules).string.min_len = 1];
+}
+
+message UpdateLocationV1Response {}
+
 message RemoveLocationV1Request {
   uint64 location_id = 1 [(validate.rules).uint64.gt = 0];
 }
 
-message RemoveLocationV1Response {
-  bool found = 1;
+message RemoveLocationV1Response {}
+
+message LocationEvent {
+  uint64 id = 1;
+  uint64 location_id = 2;
+  uint32 type = 3;
+  uint32 extra_type = 4;
+  uint32 status = 5;
+  Location entity = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
