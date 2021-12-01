@@ -6,11 +6,11 @@ import (
 
 	"github.com/gammazero/workerpool"
 
-	"github.com/ozonmp/lgc-location-api/internal/app/consumer"
-	"github.com/ozonmp/lgc-location-api/internal/app/producer"
-	"github.com/ozonmp/lgc-location-api/internal/app/repo"
-	"github.com/ozonmp/lgc-location-api/internal/app/sender"
 	"github.com/ozonmp/lgc-location-api/internal/model"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/consumer"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/producer"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/sender"
 )
 
 // Retranslator interface

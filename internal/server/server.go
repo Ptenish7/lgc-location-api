@@ -24,10 +24,10 @@ import (
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 
 	"github.com/ozonmp/lgc-location-api/internal/api"
-	eventrepo "github.com/ozonmp/lgc-location-api/internal/app/repo"
 	"github.com/ozonmp/lgc-location-api/internal/config"
 	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
 	"github.com/ozonmp/lgc-location-api/internal/repo"
+	eventrepo "github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
 	"github.com/ozonmp/lgc-location-api/internal/server/middleware/log_level"
 	"github.com/ozonmp/lgc-location-api/internal/server/middleware/log_verbose"
 	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"

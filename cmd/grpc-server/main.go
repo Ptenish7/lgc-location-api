@@ -17,12 +17,12 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 	_ "github.com/lib/pq"
 
-	eventrepo "github.com/ozonmp/lgc-location-api/internal/app/repo"
-	"github.com/ozonmp/lgc-location-api/internal/app/retranslator"
-	"github.com/ozonmp/lgc-location-api/internal/app/sender"
 	"github.com/ozonmp/lgc-location-api/internal/config"
 	"github.com/ozonmp/lgc-location-api/internal/database"
 	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
+	eventrepo "github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/retranslator"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/sender"
 	"github.com/ozonmp/lgc-location-api/internal/server"
 	"github.com/ozonmp/lgc-location-api/internal/tracer"
 )

@@ -5,7 +5,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ozonmp/lgc-location-api/internal/app/retranslator"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/retranslator"
 )
 
 func main() {
@@ -22,6 +22,7 @@ func main() {
 
 	rt := retranslator.NewRetranslator(cfg)
 	rt.Start()
+	defer rt.Close()
 
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 

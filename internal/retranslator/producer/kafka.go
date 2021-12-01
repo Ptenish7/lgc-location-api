@@ -7,9 +7,9 @@ import (
 
 	"github.com/gammazero/workerpool"
 
-	"github.com/ozonmp/lgc-location-api/internal/app/repo"
-	"github.com/ozonmp/lgc-location-api/internal/app/sender"
 	"github.com/ozonmp/lgc-location-api/internal/model"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/sender"
 )
 
 // Producer interface

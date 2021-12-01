@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ozonmp/lgc-location-api/internal/app/repo"
 	"github.com/ozonmp/lgc-location-api/internal/model"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
 )
 
 // Consumer interface

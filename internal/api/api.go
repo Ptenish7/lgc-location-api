@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/ozonmp/lgc-location-api/internal/app/repo"
 	"github.com/ozonmp/lgc-location-api/internal/model"
 	"github.com/ozonmp/lgc-location-api/internal/repo"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
 
 	pb "github.com/ozonmp/lgc-location-api/pkg/lgc-location-api"
 )
