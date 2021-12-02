@@ -5,9 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"time"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/pressly/goose/v3"
 	gelf "github.com/snovichkov/zap-gelf"
 	"go.uber.org/zap"
@@ -20,9 +18,6 @@ import (
 	"github.com/ozonmp/lgc-location-api/internal/config"
 	"github.com/ozonmp/lgc-location-api/internal/database"
 	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
-	eventrepo "github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
-	"github.com/ozonmp/lgc-location-api/internal/retranslator/retranslator"
-	"github.com/ozonmp/lgc-location-api/internal/retranslator/sender"
 	"github.com/ozonmp/lgc-location-api/internal/server"
 	"github.com/ozonmp/lgc-location-api/internal/tracer"
 )
@@ -93,16 +88,6 @@ func main() {
 		}
 	}()
 
-	rtConfig, err := configRetranslator(db, &cfg.Kafka)
-	if err != nil {
-		logger.ErrorKV(ctx, "failed to config retranslator", "err", err)
-
-		return
-	}
-	rt := retranslator.NewRetranslator(*rtConfig)
-	go rt.Start()
-	defer rt.Close()
-
 	if err := server.NewGrpcServer(db, batchSize).Start(ctx, &cfg); err != nil {
 		logger.ErrorKV(ctx, "failed to create gRPC server", "err", err)
 
@@ -140,23 +125,4 @@ func initLogger(ctx context.Context, cfg config.Config) (syncFn func()) {
 			logger.ErrorKV(ctx, "failed to sync logger", "err", syncErr)
 		}
 	}
-}
-
-func configRetranslator(db *sqlx.DB, kafkaConfig *config.Kafka) (*retranslator.Config, error) {
-	eventSender, err := sender.NewEventSender(kafkaConfig.Brokers)
-	if err != nil {
-		return nil, err
-	}
-
-	return &retranslator.Config{
-		ChannelSize:     16,
-		ConsumerCount:   2,
-		ConsumerSize:    4,
-		ConsumerTimeout: 10 * time.Second,
-		ProducerCount:   2,
-		WorkerCount:     2,
-		BatchSize:       4,
-		Repo:            eventrepo.NewEventRepo(db),
-		Sender:          eventSender,
-	}, nil
 }

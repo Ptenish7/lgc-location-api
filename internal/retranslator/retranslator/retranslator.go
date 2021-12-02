@@ -2,11 +2,11 @@ package retranslator
 
 import (
 	"context"
-	"time"
 
 	"github.com/gammazero/workerpool"
 
 	"github.com/ozonmp/lgc-location-api/internal/model"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/config"
 	"github.com/ozonmp/lgc-location-api/internal/retranslator/consumer"
 	"github.com/ozonmp/lgc-location-api/internal/retranslator/producer"
 	"github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
@@ -19,22 +19,6 @@ type Retranslator interface {
 	Close()
 }
 
-// Config represents retranslator config
-type Config struct {
-	ChannelSize uint64
-
-	ConsumerCount   uint64
-	ConsumerSize    uint64
-	ConsumerTimeout time.Duration
-
-	ProducerCount uint64
-	WorkerCount   int
-	BatchSize     uint64
-
-	Repo   eventrepo.EventRepo
-	Sender sender.EventSender
-}
-
 type retranslator struct {
 	events     chan model.LocationEvent
 	consumer   consumer.Consumer
@@ -44,23 +28,23 @@ type retranslator struct {
 }
 
 // NewRetranslator creates new retranslator
-func NewRetranslator(cfg Config) Retranslator {
+func NewRetranslator(cfg *config.Retranslator, repo eventrepo.EventRepo, sender sender.EventSender) Retranslator {
 	events := make(chan model.LocationEvent, cfg.ChannelSize)
-	workerPool := workerpool.New(cfg.WorkerCount)
+	workerPool := workerpool.New(int(cfg.WorkerCount))
 
 	c := consumer.NewDbConsumer(
 		cfg.ConsumerCount,
 		cfg.ConsumerSize,
 		cfg.ConsumerTimeout,
-		cfg.Repo,
+		repo,
 		events,
 	)
 
 	p := producer.NewKafkaProducer(
 		cfg.ProducerCount,
 		cfg.BatchSize,
-		cfg.Repo,
-		cfg.Sender,
+		repo,
+		sender,
 		events,
 		workerPool,
 	)

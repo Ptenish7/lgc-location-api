@@ -1,5 +1,5 @@
 project:
-  name: Ozon Code Platform Template API
+  name: Ozon Marketplace Logistic Location API
   debug: true
   environment: development
 

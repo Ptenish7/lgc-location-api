@@ -2,11 +2,12 @@ package consumer
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/ozonmp/lgc-location-api/internal/model"
+	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
 	"github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
 )
 
@@ -27,14 +28,6 @@ type consumer struct {
 
 	wg *sync.WaitGroup
 }
-
-//type Config struct {
-//	n         uint64
-//	events    chan<- model.LocationEvent
-//	repo      repo.EventRepo
-//	batchSize uint64
-//	timeout   time.Duration
-//}
 
 // NewDbConsumer creates a new db consumer
 func NewDbConsumer(
@@ -79,11 +72,11 @@ func (c *consumer) consume(ctx context.Context) {
 		case <-ticker.C:
 			events, err := c.repo.Lock(ctx, c.batchSize)
 			if err != nil {
-				log.Printf("failed to lock events: %v", err)
+				logger.ErrorKV(ctx, "failed to lock events", "err", err)
 				continue
 			}
 
-			log.Printf("locked %d events", len(events))
+			logger.InfoKV(ctx, fmt.Sprintf("locked %d events", len(events)))
 			for _, event := range events {
 				c.events <- event
 			}

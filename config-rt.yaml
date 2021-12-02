@@ -1,0 +1,36 @@
+project:
+  name: Ozon Marketplace Logistic Location Retranslator
+  debug: true
+  environment: development
+
+retranslator:
+  channelSize: 16
+  consumerCount: 2
+  consumerSize: 4
+  consumerTimeout: 10s
+  producerCount: 2
+  workerCount: 2
+  batchSize: 2
+
+database:
+  host: postgres
+  port: 5432
+  user: docker
+  password: docker
+  name: lgc_location_api
+  sslmode: disable
+  migrations: migrations
+  driver: pgx
+
+kafka:
+  capacity: 512
+  topic: "omp-template-events"
+  groupId: "lgc-location-api"
+  brokers:
+    - "kafka-1:9092"
+    - "localhost:9095"
+    - "kafka-2:9092"
+    - "localhost:9096"
+
+telemetry:
+  graylogPath: graylog:12201

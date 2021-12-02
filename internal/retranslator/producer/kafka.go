@@ -2,12 +2,12 @@ package producer
 
 import (
 	"context"
-	"log"
 	"sync"
 
 	"github.com/gammazero/workerpool"
 
 	"github.com/ozonmp/lgc-location-api/internal/model"
+	"github.com/ozonmp/lgc-location-api/internal/pkg/logger"
 	"github.com/ozonmp/lgc-location-api/internal/retranslator/repo"
 	"github.com/ozonmp/lgc-location-api/internal/retranslator/sender"
 )
@@ -76,7 +76,7 @@ func (p *producer) produce(ctx context.Context) {
 		select {
 		case event := <-p.events:
 			if err := p.sender.Send(&event); err != nil {
-				log.Printf("failed to send event: %v", err)
+				logger.ErrorKV(ctx, "failed to send event", "err", err)
 				updateBatch = append(updateBatch, event.ID)
 				if len(updateBatch) == int(p.batchSize) {
 					p.update(ctx, updateBatch)
@@ -105,7 +105,7 @@ func (p *producer) produce(ctx context.Context) {
 func (p *producer) update(ctx context.Context, eventIDs []uint64) {
 	p.workerPool.Submit(func() {
 		if err := p.repo.Unlock(ctx, eventIDs); err != nil {
-			log.Printf("failed to unlock events: %v", err)
+			logger.ErrorKV(ctx, "failed to unlock events", "err", err)
 		}
 	})
 }
@@ -113,7 +113,7 @@ func (p *producer) update(ctx context.Context, eventIDs []uint64) {
 func (p *producer) clean(ctx context.Context, eventIDs []uint64) {
 	p.workerPool.Submit(func() {
 		if err := p.repo.Remove(ctx, eventIDs); err != nil {
-			log.Printf("failed to remove events: %v", err)
+			logger.ErrorKV(ctx, "failed to remove events", "err", err)
 		}
 	})
 }

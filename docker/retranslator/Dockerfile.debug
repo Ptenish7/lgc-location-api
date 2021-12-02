@@ -1,0 +1,28 @@
+# Builder
+
+FROM golang:1.17-alpine AS builder
+ARG GITHUB_PATH=github.com/ozonmp/lgc-location-api
+
+WORKDIR /home/${GITHUB_PATH}
+
+RUN apk add --update make git protoc protobuf protobuf-dev curl
+COPY . .
+RUN make build-retranslator
+
+RUN go get github.com/go-delve/delve/cmd/dlv
+
+# Retranslator
+
+FROM alpine:latest as server
+ARG GITHUB_PATH=github.com/ozonmp/lgc-location-api
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+
+COPY --from=builder /home/${GITHUB_PATH}/bin/retranslator .
+COPY --from=builder /home/${GITHUB_PATH}/config-rt.yaml .
+
+COPY --from=builder /go/bin/dlv .
+
+RUN chown root:root retranslator
+
+CMD ["./dlv", "--listen=:40000", "--headless=true", "--api-version=2", "--accept-multiclient", "exec", "./retranslator"]

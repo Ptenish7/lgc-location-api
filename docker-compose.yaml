@@ -4,7 +4,7 @@ services:
   lgc-location-api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/grpc-server/Dockerfile
     restart: unless-stopped
     logging:
       driver: 'gelf'
@@ -35,6 +35,29 @@ services:
     volumes:
       - ./migrations:/root/migrations
       - ./config.yml:/root/config.yml
+
+  retranslator:
+    build:
+      context: .
+      dockerfile: docker/retranslator/Dockerfile
+    restart: unless-stopped
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: 'udp://localhost:12201'
+        tag: retranslator
+    networks:
+      - ompnw
+    depends_on:
+      - postgres
+      - kafka-1
+      - kafka-2
+    links:
+      - postgres
+      - kafka-1
+      - kafka-2
+    volumes:
+      - ./config-rt.yaml:/root/config-rt.yaml
 
   postgres:
     image: postgres:latest

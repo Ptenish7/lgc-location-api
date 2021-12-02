@@ -9,6 +9,7 @@ import (
 
 	"github.com/ozonmp/lgc-location-api/internal/mocks"
 	"github.com/ozonmp/lgc-location-api/internal/model"
+	"github.com/ozonmp/lgc-location-api/internal/retranslator/config"
 )
 
 func TestStart(t *testing.T) {
@@ -18,18 +19,16 @@ func TestStart(t *testing.T) {
 
 	repo.EXPECT().Lock(gomock.Any(), gomock.Any()).AnyTimes()
 
-	cfg := Config{
+	cfg := config.Retranslator{
 		ChannelSize:     512,
 		ConsumerCount:   2,
 		ConsumerSize:    10,
 		ConsumerTimeout: 10 * time.Second,
 		ProducerCount:   2,
 		WorkerCount:     2,
-		Repo:            repo,
-		Sender:          sender,
 	}
 
-	retranslator := NewRetranslator(cfg)
+	retranslator := NewRetranslator(&cfg, repo, sender)
 	retranslator.Start()
 	retranslator.Close()
 }
@@ -73,18 +72,16 @@ func TestLockRemove(t *testing.T) {
 		t.Errorf("sent and removed IDs not matched")
 	}
 
-	cfg := Config{
+	cfg := config.Retranslator{
 		ChannelSize:     512,
 		ConsumerCount:   2,
-		ConsumerSize:    2,
-		ConsumerTimeout: 1 * time.Second,
+		ConsumerSize:    10,
+		ConsumerTimeout: 10 * time.Second,
 		ProducerCount:   2,
 		WorkerCount:     2,
-		Repo:            repo,
-		Sender:          sender,
 	}
 
-	retranslator := NewRetranslator(cfg)
+	retranslator := NewRetranslator(&cfg, repo, sender)
 	retranslator.Start()
 	time.Sleep(2 * time.Second)
 	retranslator.Close()
@@ -129,18 +126,16 @@ func TestLockUnlock(t *testing.T) {
 		t.Errorf("failed to sent and unlocked IDs not matched")
 	}
 
-	cfg := Config{
+	cfg := config.Retranslator{
 		ChannelSize:     512,
 		ConsumerCount:   2,
-		ConsumerSize:    2,
-		ConsumerTimeout: 1 * time.Second,
+		ConsumerSize:    10,
+		ConsumerTimeout: 10 * time.Second,
 		ProducerCount:   2,
 		WorkerCount:     2,
-		Repo:            repo,
-		Sender:          sender,
 	}
 
-	retranslator := NewRetranslator(cfg)
+	retranslator := NewRetranslator(&cfg, repo, sender)
 	retranslator.Start()
 	time.Sleep(2 * time.Second)
 	retranslator.Close()

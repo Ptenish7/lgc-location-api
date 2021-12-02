@@ -6,9 +6,9 @@ ARG GITHUB_PATH=github.com/ozonmp/lgc-location-api
 WORKDIR /home/${GITHUB_PATH}
 
 RUN apk add --update make git protoc protobuf protobuf-dev curl
-COPY Makefile Makefile
+COPY ../../Makefile Makefile
 RUN make deps-go
-COPY . .
+COPY ../.. .
 RUN make build-go
 
 # gRPC Server
