@@ -35,6 +35,7 @@ type Database struct {
 	Name       string `yaml:"name"`
 	SslMode    string `yaml:"sslmode"`
 	Driver     string `yaml:"driver"`
+	MaxRetry   uint64 `yaml:"maxRetry"`
 }
 
 // Project - contains all parameters project information.
@@ -63,6 +64,7 @@ type Kafka struct {
 	Topic    string   `yaml:"topic"`
 	GroupID  string   `yaml:"groupId"`
 	Brokers  []string `yaml:"brokers"`
+	MaxRetry uint64   `yaml:"maxRetry"`
 }
 
 // Telemetry config for service.

@@ -34,6 +34,7 @@ type Database struct {
 	Name       string `yaml:"name"`
 	SslMode    string `yaml:"sslmode"`
 	Driver     string `yaml:"driver"`
+	MaxRetry   uint64 `yaml:"maxRetry"`
 }
 
 // Grpc - contains parameter address grpc.
@@ -80,6 +81,7 @@ type Kafka struct {
 	Topic    string   `yaml:"topic"`
 	GroupID  string   `yaml:"groupId"`
 	Brokers  []string `yaml:"brokers"`
+	MaxRetry uint64   `yaml:"maxRetry"`
 }
 
 // Status config for service.

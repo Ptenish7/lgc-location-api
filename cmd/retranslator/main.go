@@ -48,7 +48,7 @@ func main() {
 		cfg.Database.SslMode,
 	)
 
-	db, err := database.NewPostgres(ctx, dsn, cfg.Database.Driver)
+	db, err := database.NewPostgres(ctx, dsn, cfg.Database.Driver, cfg.Database.MaxRetry)
 	if err != nil {
 		logger.FatalKV(ctx, "failed to init postgres", "err", err)
 	}
@@ -58,7 +58,7 @@ func main() {
 		}
 	}()
 
-	eventSender, err := sender.NewEventSender(cfg.Kafka.Brokers)
+	eventSender, err := sender.NewEventSender(cfg.Kafka.Brokers, cfg.Kafka.MaxRetry)
 	if err != nil {
 		logger.FatalKV(ctx, "failed to init event sender", "err", err)
 	}

@@ -21,11 +21,12 @@ type eventSender struct {
 }
 
 // NewEventSender created new event sender with specified brokers
-func NewEventSender(brokers []string) (EventSender, error) {
+func NewEventSender(brokers []string, maxRetry uint64) (EventSender, error) {
 	config := sarama.NewConfig()
 	config.Producer.Partitioner = sarama.NewRandomPartitioner
 	config.Producer.RequiredAcks = sarama.WaitForAll
 	config.Producer.Return.Successes = true
+	config.Producer.Retry.Max = int(maxRetry)
 
 	producer, err := sarama.NewSyncProducer(brokers, config)
 	if err != nil {

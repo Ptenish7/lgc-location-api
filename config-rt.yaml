@@ -21,6 +21,7 @@ database:
   sslmode: disable
   migrations: migrations
   driver: pgx
+  maxRetry: 5
 
 kafka:
   capacity: 512
@@ -31,6 +32,7 @@ kafka:
     - "localhost:9095"
     - "kafka-2:9092"
     - "localhost:9096"
+  maxRetry: 5
 
 telemetry:
   graylogPath: graylog:12201
