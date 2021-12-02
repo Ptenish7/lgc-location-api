@@ -18,7 +18,7 @@ func NewPostgres(ctx context.Context, dsn, driver string, maxRetry uint64) (*sql
 		return nil, err
 	}
 
-	var retries uint64 = 0
+	var retries uint64
 
 	if err = db.Ping(); err != nil {
 		ticker := time.NewTicker(2 * time.Second)
